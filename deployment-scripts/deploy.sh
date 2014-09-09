@@ -17,6 +17,9 @@ export PS4='+(${BASH_SOURCE}:${LINENO}): ${FUNCNAME[0]:+${FUNCNAME[0]}(): }'
 ulimit -u 4096
 ulimit -n 4096
 
+# set debug mode
+set -x
+
 # halt on errors
 set -e
 
@@ -25,6 +28,7 @@ alias ssh2fabric="sshpass -p admin $SSH_PATH -p 8101 -o ServerAliveCountMax=100 
 
 #invoke clean script
 sh clean_fuse_env.sh
+#sh ../deploy-to-mvn.sh
 
 # start fuse on root node (yes, that initial backslash is required to not use the declared alias)
 "$FUSE_PATH/bin/start"
@@ -43,7 +47,7 @@ ssh2fabric "wait-for-service -t 300000 io.fabric8.api.BootstrapComplete"
 ssh2fabric "fabric:create --clean --resolver localip --global-resolver localip --wait-for-provisioning --profile fabric" 
 
 # configure local maven/nexus
-ssh2fabric "fabric:profile-edit --append --pid io.fabric8.agent/org.ops4j.pax.url.mvn.repositories=\"/home/gahealy/.m2/repository\" default"
+ssh2fabric "fabric:profile-edit --append --pid io.fabric8.agent/org.ops4j.pax.url.mvn.repositories=\"file:/home/gahealy/.m2/repository@snapshots@id=maven-snapshots\" default"
 ssh2fabric "fabric:profile-edit --append --pid io.fabric8.agent/org.ops4j.pax.url.mvn.repositories=\"http://localhost:8081/nexus/content/repositories/releases/@releases@id=local-releases\" default"
 ssh2fabric "fabric:profile-edit --append --pid io.fabric8.agent/org.ops4j.pax.url.mvn.repositories=\"http://localhost:8081/nexus/content/repositories/snapshots/@snapshots@id=local-snapshots\" default"
 
@@ -52,8 +56,13 @@ ssh2fabric "fabric:profile-edit --pid org.fusesource.fabric.maven/checksumPolicy
 ssh2fabric "fabric:profile-edit --pid org.ops4j.pax.url.mvn/checksumPolicy=warn  default "
 
 # install scripts which will create the containers
-#ssh2fabric "shell:source mvn:sample/karaf_scripts/1.0.0-SNAPSHOT/karaf/create_containers"
-#ssh2fabric "shell:source mvn:sample/karaf_scripts/1.0.0-SNAPSHOT/karaf/deploy_codebase"
+ssh2fabric "shell:source mvn:com.garethahealy/karaf-scripts/1.0.0-SNAPSHOT/karaf/create-containers"
+ssh2fabric "shell:source mvn:com.garethahealy/karaf-scripts/1.0.0-SNAPSHOT/karaf/create-profiles"
+ssh2fabric "shell:source mvn:com.garethahealy/karaf-scripts/1.0.0-SNAPSHOT/karaf/upgrade-containers"
+ssh2fabric "shell:source mvn:com.garethahealy/karaf-scripts/1.0.0-SNAPSHOT/karaf/assign-profiles"
+
+# set debug mode off
+set +x
 
 echo "
 ----------------------------------------------------

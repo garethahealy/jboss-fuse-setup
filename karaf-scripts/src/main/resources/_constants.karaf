@@ -1,0 +1,7 @@
+ROOT_CONTAINER_NAME=root
+
+ESB_CONTAINER_NAME=esb-uk
+AMQ_CONTAINER_NAME=amq-uk
+
+ESB_PROFILE_NAME=gahealy-esb-uk
+AMQ_PROFILE_NAME=gahealy-amq-uk
