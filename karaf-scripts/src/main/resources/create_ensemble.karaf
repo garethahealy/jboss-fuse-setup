@@ -1,4 +1,0 @@
-source mvn:sample/karaf_scripts/${karaf_scripts.version}/karaf/environment_constants
-
-fabric:ensemble-add -f esf2 esf3
-

@@ -1,8 +1,0 @@
-source mvn:sample/karaf_scripts/${karaf_scripts.version}/karaf/environment_constants
-
-
-#### 
-fabric:container-create-ssh --host $IP_FAB02 --port $SSH_PORT --path $CONTAINER_PATH --user fuse --profile fabric esf2
-#### operation is slow. we have to wait more
-fabric:container-create-ssh --host $IP_FAB03 --port $SSH_PORT --path $CONTAINER_PATH --user fuse --profile fabric esf3
-
