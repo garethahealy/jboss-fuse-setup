@@ -284,13 +284,13 @@
   <!-- Components -->
   <dependencyManagement>
     <dependencies>
-      <!-- Camel -->
+      <!-- Camel 
       <dependency>
         <groupId>org.apache.camel</groupId>
         <artifactId>camel-core</artifactId>
         <version>${camel-version}</version>
         <scope>provided</scope>
-      </dependency>
+      </dependency> -->
     </dependencies>
   </dependencyManagement>
   
