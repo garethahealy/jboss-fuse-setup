@@ -1,7 +1,5 @@
 #!/bin/bash
 
-###
-# The below location should be to the root pom
-###
+ROOT_POM_PATH=$1
 
-mvn clean install deploy -DremoteOBR -f/home/gahealy/jboss-studio-workspace/jboss-fuse-setup
+mvn clean install deploy -DremoteOBR -f$ROOT_POM_PATH
