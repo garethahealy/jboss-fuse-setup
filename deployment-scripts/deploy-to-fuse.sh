@@ -1,4 +1,7 @@
 #!/bin/sh
+###
+# Script to create the Fabric and containers
+###
 
 # Full path of your ssh, used by the aliases
 SSH_PATH=$(which ssh)
