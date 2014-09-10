@@ -3,6 +3,8 @@
 # Script to create the Fabric and containers
 ###
 
+FUSE_PATH=$1
+
 # Full path of your ssh, used by the aliases
 SSH_PATH=$(which ssh)
 
