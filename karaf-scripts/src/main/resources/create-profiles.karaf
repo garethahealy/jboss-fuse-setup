@@ -6,8 +6,8 @@ fabric:version-create --default
 # Create a profile for the ESB
 fabric:profile-create --parents jboss-fuse-minimal $ESB_PROFILE_NAME
 
-#fabric:profile-edit --repositories mvn:com.garethahealy/karaf-scripts-features/1.0.0-SNAPSHOT/xml/features $ESB_PROFILE_NAME
-#fabric:profile-edit --features garethahealy-karaf-scripts $ESB_PROFILE_NAME
+# Add the examples features
+fabric:profile-edit --repositories mvn:com.garethahealy/examples-features/1.0.0-SNAPSHOT/xml/features $ESB_PROFILE_NAME
 
 # Create a profile for the AMQ
 fabric:profile-create --parents mq-base $AMQ_PROFILE_NAME
