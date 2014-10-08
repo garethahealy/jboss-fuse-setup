@@ -14,4 +14,4 @@ fabric:profile-create --parents mq-base $AMQ_PROFILE_NAME
 
 # Add xstream so we can use stomp in the future
 fabric:profile-edit --repositories mvn:org.apache.camel.karaf/apache-camel/\${version:camel}/xml/features $AMQ_PROFILE_NAME
-fabric:profile-edit --features camel-xstream $ESB_PROFILE_NAME
+fabric:profile-edit --features camel-xstream $AMQ_PROFILE_NAME
