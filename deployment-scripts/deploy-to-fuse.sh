@@ -45,6 +45,9 @@ ssh2fabric "fabric:profile-edit --append --pid io.fabric8.agent/org.ops4j.pax.ur
 ssh2fabric "fabric:profile-edit --pid org.fusesource.fabric.maven/checksumPolicy=warn  default "
 ssh2fabric "fabric:profile-edit --pid org.ops4j.pax.url.mvn/checksumPolicy=warn  default "
 
+# Add in the zookeeper commands to fabric, helps if we have issues in the future
+ssh2fabric "fabric:profile-edit --features fabric-zookeeper-commands fabric"
+
 # Install scripts which will create the containers and profiles
 ssh2fabric "shell:source mvn:com.garethahealy/karaf-scripts/1.0.0-SNAPSHOT/karaf/create-containers"
 ssh2fabric "shell:source mvn:com.garethahealy/karaf-scripts/1.0.0-SNAPSHOT/karaf/create-profiles"
