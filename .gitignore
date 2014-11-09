@@ -7,6 +7,10 @@ tmp/
 *.swp
 .settings/
 .loadpath
+.project
+.classpath
+.attach_pid*
+target/
 
 # Package Files #
 *.jar
