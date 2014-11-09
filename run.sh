@@ -8,11 +8,7 @@ FUSE_USER=jbossfuse
 LOCAL_USER=gahealy
 
 # Set the below paths accordingly
-<<<<<<< HEAD
 ROOT_POM_PATH="/Users/garethah/Documents/github/garethahealy/jboss-fuse-setup"
-=======
-ROOT_POM_PATH="/NotBackedUp/jboss-studio-workspace/jboss-fuse-setup"
->>>>>>> ca06a548659f3fafbabdb667a31dc9363a4cd6ae
 FUSE_PATH="/opt/rh/jboss-fuse-6.1.0.redhat-379"
 
 SH_PATH=$(which sh)
