@@ -37,7 +37,7 @@ ssh2fabric "wait-for-service -t 300000 io.fabric8.api.BootstrapComplete"
 ssh2fabric "fabric:create --clean --resolver localip --global-resolver localip --wait-for-provisioning --profile fabric" 
 
 # Configure local maven/nexus
-ssh2fabric "fabric:profile-edit --append --pid io.fabric8.agent/org.ops4j.pax.url.mvn.repositories=\"file:/home/gahealy/.m2/repository@snapshots@id=maven-snapshots\" default"
+ssh2fabric "fabric:profile-edit --append --pid io.fabric8.agent/org.ops4j.pax.url.mvn.repositories=\"file:/Users/garethah/.m2/repository@snapshots@id=maven-snapshots\" default"
 ssh2fabric "fabric:profile-edit --append --pid io.fabric8.agent/org.ops4j.pax.url.mvn.repositories=\"http://localhost:8081/nexus/content/repositories/releases/@releases@id=local-releases\" default"
 ssh2fabric "fabric:profile-edit --append --pid io.fabric8.agent/org.ops4j.pax.url.mvn.repositories=\"http://localhost:8081/nexus/content/repositories/snapshots/@snapshots@id=local-snapshots\" default"
 
