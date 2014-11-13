@@ -8,6 +8,8 @@ FUSE_PATH="/opt/rh/jboss-fuse-6.1.0.redhat-379"
 # Full path of your ssh, used by the aliases
 SSH_PATH=$(which ssh)
 
+KARAF_PORT=8101
+
 # Configure logging to print line numbers
 export PS4='+(${BASH_SOURCE}:${LINENO}): ${FUNCNAME[0]:+${FUNCNAME[0]}(): }'
 
@@ -27,26 +29,25 @@ GREP_PATH=$(which grep)
 CUT_PATH=$(which cut)
 AWK_PATH=$(which awk)
 
-alias en0="$IFCONFIG_PATH en0 | $GREP_PATH 'inet' | $CUT_PATH -d: -f2 | $AWK_PATH '{ print \$2; }'"
-localip=$(echo ${en0} | tr -d '\n')
+EN0_LOCALIP=`$IFCONFIG_PATH en0 | $GREP_PATH 'inet' | $CUT_PATH -d: -f2 | $AWK_PATH '{ print \$2; }' | tr -d '\n'`
 
-
-#echo $localip
 # Kill any processes matching the below
 kill -kill $( ps aux | grep java | grep karaf | grep -v grep | awk '{ print $2; }' )
 
 # Alias to connect to the ssh server exposed by JBoss Fuse. Uses sshpass to script the password authentication
-alias ssh2fabric="sshpass -p admin $SSH_PATH -p 8101 -o ServerAliveCountMax=100 -o ConnectionAttempts=180 -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -o PreferredAuthentications=password -o LogLevel=ERROR admin@localhost"
+alias ssh2fabric="sshpass -p admin $SSH_PATH -o ServerAliveCountMax=100 -o ConnectionAttempts=180 -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -o PreferredAuthentications=password -o LogLevel=ERROR admin@localhost"
 
-# Start fuse on root node (yes, that initial backslash is required to not use the declared alias)
-"$FUSE_PATH/bin/start"
+array=( "$FUSE_PATH/bin" "$FUSE_PATH/instances/esb-uk/bin" "$FUSE_PATH/instances/amq-uk/bin" )
+for i in "${array[@]}"
+do
+	# Start fuse on root node (yes, that initial backslash is required to not use the declared alias)
+	"$i/start"
 
-# Wait for ssh server to be up, avoids "Connection reset by peer" errors
-while ! ssh2fabric "echo up" ; do sleep 1s; done;
+	# Wait for ssh server to be up, avoids "Connection reset by peer" errors
+	while ! ssh2fabric "-p $KARAF_PORT" "echo up" ; do sleep 1s; done;
 
-# Wait for critical components to be available before progressing with other steps
-ssh2fabric "wait-for-service -t 300000 io.fabric8.api.BootstrapComplete"
+	# Set zookeeper to be the localip so fabric can come back up
+	ssh2fabric "-p $KARAF_PORT" "config:propset -p io.fabric8.zookeeper zookeeper.url $EN0_LOCALIP:2181"
 
-ssh2fabric "config:edit io.fabric8.zookeeper"
-ssh2fabric "config:propset zookeeper.url $localip:2181"
-ssh2fabric "config:update"
+	port=$((port+1))
+done
