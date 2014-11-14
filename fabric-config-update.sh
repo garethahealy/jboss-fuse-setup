@@ -49,5 +49,5 @@ do
 	# Set zookeeper to be the localip so fabric can come back up
 	ssh2fabric "-p $KARAF_PORT" "config:propset -p io.fabric8.zookeeper zookeeper.url $EN0_LOCALIP:2181"
 
-	port=$((port+1))
+	KARAF_PORT=$((KARAF_PORT+1))
 done
