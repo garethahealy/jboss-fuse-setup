@@ -111,8 +111,8 @@
 						<Export-Package>${build.osgi.export}</Export-Package>
 						<Import-Package>${build.osgi.import}</Import-Package>
 						<Private-Package>${build.osgi.private.pkg}</Private-Package>
-						<Import-Service>${camel.osgi.import.service}</Import-Service>
-            			<Export-Service>${camel.osgi.export.service}</Export-Service>
+						<Import-Service>${build.osgi.import.service}</Import-Service>
+            			<Export-Service>${build.osgi.export.service}</Export-Service>
 						<Implementation-Title>${build.osgi.implementation.title}</Implementation-Title>
 						<Implementation-Version>${project.version}</Implementation-Version>
 						<Karaf-Info>${build.osgi.symbolic.name}=${build.osgi.version.clean}</Karaf-Info>
