@@ -6,14 +6,14 @@
     <parent>
         <groupId>com.garethahealy</groupId>
         <artifactId>osgi-plugins-parent</artifactId>
-        <version>1.0.6</version>
-        <relativePath>../poms/osgi-plugins-parent</relativePath>
+        <version>1.1.0-SNAPSHOT</version>
+        <relativePath/>
     </parent>
     <groupId>com.garethahealy.fuse-setup</groupId>
     <artifactId>jboss-fuse-setup-parent</artifactId>
     <packaging>pom</packaging>
     <version>1.0.0-SNAPSHOT</version>
-    <name>${project.artifactId}</name>
+    <name>GarethHealy :: JBoss Fuse Setup</name>
 
     <scm>
         <connection>scm:git:https://github.com/garethahealy/jboss-fuse-setup/tree/master</connection>
@@ -23,6 +23,7 @@
 
     <modules>
         <module>karaf-scripts</module>
+        <module>scaffolding-scripts</module>
     </modules>
 
 </project>

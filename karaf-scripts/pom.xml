@@ -11,7 +11,7 @@
     </parent>
     <artifactId>karaf-scripts</artifactId>
     <packaging>bundle</packaging>
-    <name>${project.artifactId}</name>
+    <name>GarethHealy :: JBoss Fuse Setup :: Karaf Scripts</name>
 
     <build>
         <resources>
