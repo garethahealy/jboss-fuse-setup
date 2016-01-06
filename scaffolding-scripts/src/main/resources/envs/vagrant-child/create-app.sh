@@ -28,5 +28,5 @@ WHITE="\e[0m"
 
 echo -e $GREEN"Creating ${#APP_HOSTS[@]} apps : ${APP_HOSTS[@]}"$WHITE
 
-karaf_client fabric:container-create-ssh --host machine3.jbossfuse621.vagrant.local --resolver manualip --manual-ip=machine3.jbossfuse621.vagrant.local --path $HOST_RH_HOME/containers --user $SSH_USER --jvm-opts \"$JVM_APP_OPTS\" --profile jboss-fuse-minimal esb-001
-wait_for_container_status "esb-001" "started" "--wait 300000"
+karaf_client fabric:container-create-child --resolver manualip --manual-ip=10.20.1.21 --jvm-opts \"$JVM_APP_OPTS\" --profile jboss-fuse-minimal $ROOT_NODE_NAME esb-001
+wait_for_container_status "esb-001" "started"
