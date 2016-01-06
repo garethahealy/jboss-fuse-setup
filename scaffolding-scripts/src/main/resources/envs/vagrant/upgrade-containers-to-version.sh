@@ -40,5 +40,11 @@ wait_for_container_status "esb-001" "started"
 karaf_client "fabric:container-upgrade $RELEASE_VERSION gwy-001"
 wait_for_container_status "gwy-001" "started"
 
+karaf_client "fabric:container-upgrade $RELEASE_VERSION fabric-003"
+wait_for_container_status "fabric-003" "started"
+
+karaf_client "fabric:container-upgrade $RELEASE_VERSION fabric-002"
+wait_for_container_status "fabric-002" "started"
+
 karaf_client "fabric:container-upgrade $RELEASE_VERSION fabric-001"
 wait_for_container_status "fabric-001" "started"

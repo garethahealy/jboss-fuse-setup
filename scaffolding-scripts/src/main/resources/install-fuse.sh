@@ -89,11 +89,16 @@ echo ""
 . ./lib/helper_functions.sh
 
 FUSE_ZIP=jboss-fuse-full-6.2.1.redhat-084.zip
-FUSE_ZIP_DOWNLOAD=http://localhost:8081/nexus/content/repositories/releases/org/jboss/fuse/jboss-fuse-full/6.2.1.redhat-084/$FUSE_ZIP
+FUSE_ZIP_DOWNLOAD=http://$NEXUS_IP:8081/nexus/content/repositories/releases/org/jboss/fuse/jboss-fuse-full/6.2.1.redhat-084/$FUSE_ZIP
 SCAFFOLDING_ZIP=$HOST_RH_HOME/scaffolding-scripts-${project.version}-all.zip
 SCRIPTS_FOLDER=$HOST_RH_HOME/scripts
 
 kill_karaf_instances
+
+if [ ! -d $HOST_RH_HOME ]; then
+    echo -e $RED"$HOST_RH_HOME does not exist!"$WHITE
+    exit 1
+fi
 
 if [ -d $HOST_FUSE_HOME ]; then
     echo -e $RED"$HOST_FUSE_HOME already exists!"$WHITE
@@ -106,14 +111,13 @@ if [ -d $HOST_FUSE_HOME ]; then
         echo -e $RED"Couldnt delete: $HOST_FUSE_HOME :: rm -rf $HOST_FUSE_HOME"$WHITE
         exit 1
     fi
-else
-    echo -e $RED"$HOST_RH_HOME does not exist!"$WHITE
-    exit 1
 fi
 
-if [ -a $HOST_RH_HOME/$FUSE_ZIP ]; then
-    echo -e $YELLOW"Removing old: $HOST_RH_HOME/$FUSE_ZIP"$WHITE
-    rm -rf $HOST_RH_HOME/$FUSE_ZIP
+if [[ $DOWNLOAD_FUSE_ZIP == "true" ]]; then
+    if [ -a $HOST_RH_HOME/$FUSE_ZIP ]; then
+        echo -e $YELLOW"Removing old: $HOST_RH_HOME/$FUSE_ZIP"$WHITE
+        rm -rf $HOST_RH_HOME/$FUSE_ZIP
+    fi
 fi
 
 if [ -a $SCAFFOLDING_ZIP ]; then
@@ -139,10 +143,18 @@ if [[ $KARAF_PASSWORD == "readline" ]]; then
     sed -i 's/KARAF_PASSWORD=readline/KARAF_PASSWORD=$KARAF_PASSWORD/' /tmp/scripts/envs/$DEPLOYMENT_ENVIRONMENT/environment.sh
 fi
 
-echo -e $GREEN"Downloading JBoss Fuse.zip..."$WHITE
-cd $HOST_RH_HOME &&
-    wget $FUSE_ZIP_DOWNLOAD &&
-    unzip $FUSE_ZIP
+if [[ $DOWNLOAD_FUSE_ZIP == "true" ]]; then
+    echo -e $GREEN"Downloading JBoss Fuse.zip..."$WHITE
+
+    cd $HOST_RH_HOME &&
+        wget $FUSE_ZIP_DOWNLOAD &&
+        unzip $FUSE_ZIP
+else
+    echo -e $GREEN"Unzipping JBoss Fuse.zip..."$WHITE
+
+    cd $HOST_RH_HOME &&
+        unzip $FUSE_ZIP
+fi
 
 if [ ! -d $HOST_FUSE_HOME ]; then
     echo -e $RED"$HOST_FUSE_HOME doesnt exist"$WHITE

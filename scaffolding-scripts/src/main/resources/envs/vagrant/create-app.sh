@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+ #!/usr/bin/env bash
 
 ###
 # #%L
@@ -20,11 +20,13 @@
 # #L%
 ###
 
-VAR_ENV=$1
+# Set colours
+GREEN="\e[32m"
+RED="\e[41m\e[37m\e[1m"
+YELLOW="\e[33m"
+WHITE="\e[0m"
 
-. $HOST_RH_HOME/scripts/envs/$VAR_ENV/environment.sh
-. $HOST_RH_HOME/scripts/lib/helper_functions.sh
+echo -e $GREEN"Creating ${#APP_HOSTS[@]} apps : ${APP_HOSTS[@]}"$WHITE
 
-clear_karaf_container
-clear_other_folders
-clear_m2
+karaf_client fabric:container-create-ssh --host machine3.jbossfuse621.vagrant.local --resolver manualip --manual-ip=machine3.jbossfuse621.vagrant.local --path $HOST_RH_HOME/containers --user $SSH_USER --jvm-opts \"$JVM_APP_OPTS\" --profile jboss-fuse-minimal esb-001
+wait_for_container_status "esb-001" "started" "--wait 300000"

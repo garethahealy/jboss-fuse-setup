@@ -37,6 +37,7 @@ for i in ${FUSE_HOSTS[@]}; do
         #Step-3
 		clear_karaf_container
         clear_other_folders
+        clear_m2
 	else
 	    #Step-1
 		ssh_copy_scripts "${i}"
@@ -70,7 +71,8 @@ karaf_client fabric:profile-edit --pid io.fabric8.agent/org.ops4j.pax.url.mvn.re
 karaf_client fabric:profile-edit --pid io.fabric8.agent/patch.repositories=\"$PATCH_MAVEN_REPOSITORY\" default
 
 # Increase debugging
-karaf_client fabric:profile-edit --pid org.ops4j.pax.logging/log4j.logger.io.fabric8.service.ssh=DEBUG karaf
+karaf_client fabric:profile-edit --append --pid org.ops4j.pax.logging/log4j.logger.org.apache.sshd.common.io.nio2.Nio2Session=INFO karaf
+karaf_client fabric:profile-edit --append --pid org.ops4j.pax.logging/log4j.logger.io.fabric8.service.ssh=DEBUG karaf
 karaf_client fabric:profile-edit --pid \"org.ops4j.pax.logging/log4j.rootLogger=DEBUG, out, osgi:*\" karaf
 karaf_client fabric:profile-edit --append --pid org.ops4j.pax.logging/$GAH_LOGGING karaf
 

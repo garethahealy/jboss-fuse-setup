@@ -20,7 +20,7 @@
 # #L%
 ###
 
-export NEXUS_IP=localhost
+#export NEXUS_IP | 'vagrant up' sets this as an enviroment var
 
 # Maven Repo
 export REMOTE_MAVEN_REPOSITORY='file:\${runtime.home}/\${karaf.default.repository}@snapshots@id=karaf-default, file:\${runtime.data}/maven/upload@snapshots@id=fabric-upload, http://'$NEXUS_IP':8081/nexus/content/groups/public@snapshots@id=local.nexus.public'
@@ -31,15 +31,15 @@ export PATCH_MAVEN_REPOSITORY="http://$NEXUS_IP:8081/nexus/content/repositories/
 export GAH_LOGGING=log4j.logger.com.garethahealy=TRACE
 
 # Container IPs
-fabric1_static="127.0.0.1"
+fabric1_static="machine1.jbossfuse621.vagrant.local"
 
-amq_hosts="127.0.0.1"
-app_hosts="127.0.0.1"
+amq_hosts="machine2.jbossfuse621.vagrant.local"
+app_hosts="machine3.jbossfuse621.vagrant.local"
 
 # Host Config
 export ROOT_NODE=($fabric1_static)
-export FUSE_HOSTS=($fabric1_static)
-export FABRIC_HOSTS=
+export FUSE_HOSTS=($fabric1_static $amq_hosts $app_hosts)
+export FABRIC_HOSTS=($amq_hosts $app_hosts)
 
 export APP_HOSTS=($app_hosts)
 export BROKER_HOSTS=($amq_hosts)
@@ -65,7 +65,11 @@ export JVM_GATEWAY_OPTS="-Xms512m -Xmx512m ${JVM_AGENT_OPTS} ${JVM_GC_OPTS}"
 
 # Root node config
 export ROOT_NODE_NAME=fabric-001
-export FABRIC_CREATE_CMD="fabric:create --force --clean --resolver manualip --global-resolver manualip --manual-ip 127.0.0.1 --profile default --wait-for-provisioning"
+export FABRIC_CREATE_CMD="fabric:create --force --clean --resolver manualip --manual-ip=machine1.jbossfuse621.vagrant.local --profile default --wait-for-provisioning"
 
-export DOWNLOAD_FUSE_ZIP="true"
-export SHOULD_CLEAR_M2="false"
+export DOWNLOAD_FUSE_ZIP="false"
+export SHOULD_CLEAR_M2="true"
+
+
+
+

@@ -20,11 +20,13 @@
 # #L%
 ###
 
-VAR_ENV=$1
+# Set colours
+GREEN="\e[32m"
+RED="\e[41m\e[37m\e[1m"
+YELLOW="\e[33m"
+WHITE="\e[0m"
 
-. $HOST_RH_HOME/scripts/envs/$VAR_ENV/environment.sh
-. $HOST_RH_HOME/scripts/lib/helper_functions.sh
+echo -e $GREEN"Creating ${#BROKER_HOSTS[@]} brokers : ${BROKER_HOSTS[@]}"$WHITE
 
-clear_karaf_container
-clear_other_folders
-clear_m2
+karaf_client fabric:container-create-ssh --host machine2.jbossfuse621.vagrant.local --resolver manualip --manual-ip=machine2.jbossfuse621.vagrant.local --path $HOST_RH_HOME/containers --user $SSH_USER --jvm-opts \"$JVM_BROKER_OPTS\" --profile mq-amq amq-001
+wait_for_container_status "amq-001" "started" "--wait 300000"

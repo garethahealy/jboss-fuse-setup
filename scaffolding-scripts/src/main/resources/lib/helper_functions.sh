@@ -71,7 +71,14 @@ function clear_karaf_container()
 
 function clear_other_folders()
 {
-	rm -fr $HOST_RH_HOME/containers $HOME/.m2/repository/ /tmp/fabric8* /tmp/jboss-fuse*
+	rm -fr $HOST_RH_HOME/containers /tmp/fabric8* /tmp/jboss-fuse*
+}
+
+function clear_m2()
+{
+    if [[ $SHOULD_CLEAR_M2 == "true" ]]; then
+        rm -fr $HOME/.m2/repository/
+    fi
 }
 
 function karaf_commands()
@@ -128,12 +135,13 @@ function wait_for_container_status()
 {
 	local CONTAINER=$1
 	local STATUS=$2
+	local OTHER_ARGS=$3
 
     echo -e $YELLOW"Waiting for fabric command: container-status"$WHITE
 	karaf_client "wait-for-command fabric container-status"
 
-    echo -e $YELLOW"Executing Karaf CMD: $CLIENT_INVOCATION \"fabric:container-status --status $STATUS $CONTAINER\""$WHITE
-    status_message=$($CLIENT_INVOCATION "fabric:container-status --status $STATUS $CONTAINER")
+    echo -e $YELLOW"Executing Karaf CMD: $CLIENT_INVOCATION \"fabric:container-status --status $STATUS $OTHER_ARGSSHOULD_CLEAR_M2 $CONTAINER\""$WHITE
+    status_message=$($CLIENT_INVOCATION "fabric:container-status --status $STATUS $OTHER_ARGS $CONTAINER")
 
     echo -e $YELLOW"Container $CONTAINER status is: $status_message"$WHITE
 
