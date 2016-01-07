@@ -34,19 +34,19 @@ WHITE="\e[0m"
 
 read -n1 -r -p "Press the any key..."
 
-if [ "$#" -lt 1 ]; then
+if [[ "$#" -lt 1 ]]; then
     echo -e $RED"Illegal number of parameters."$WHITE
     echo -e $RED"Usage: ./assign-profiles.sh (environment)"$WHITE
     echo -e $RED"Example: ./assign-profiles.sh test"$WHITE
     exit 1
 fi
 
-if [ "$1" != "dev" ] && [ "$1" != "sandbox" ] && [ "$1" != "test" ] && [ "$1" != "preprod" ] && [ "$1" != "prod" ]; then
+if [[ "$1" != "dev" ]] && [[ "$1" != "sandbox" ]] && [[ "$1" != "test" ]] && [[ "$1" != "preprod" ]] && [[ "$1" != "prod" ]]; then
     echo -e $RED"Environment $1 not supported. Expected; dev, sandbox, test, preprod or prod"$WHITE
     exit 1
 fi
 
-if [ ! -d $HOST_RH_HOME ]; then
+if [[ ! -d $HOST_RH_HOME ]]; then
     echo -e $RED"$HOST_RH_HOME does not exist!"$WHITE
     exit 1
 fi

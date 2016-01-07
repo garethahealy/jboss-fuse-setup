@@ -32,19 +32,18 @@ export PATCH_MAVEN_REPOSITORY="http://$NEXUS_IP:8081/nexus/content/repositories/
 export GAH_LOGGING=log4j.logger.com.garethahealy=TRACE
 
 # Container IPs
-fabric1_static="10.20.1.11"
-
-amq_hosts="10.20.1.12"
-app_hosts="10.20.1.13"
+export MACHINE1="10.20.1.11"
+export MACHINE2="10.20.1.12"
+export MACHINE3="10.20.1.13"
 
 # Host Config
-export ROOT_NODE=($fabric1_static)
-export FUSE_HOSTS=($fabric1_static)
-export FABRIC_HOSTS=
+export ROOT_NODE=($MACHINE1)
+export FUSE_HOSTS=($MACHINE1 $MACHINE2 $MACHINE3)
+export FABRIC_HOSTS=($MACHINE2 $MACHINE3)
 
-export APP_HOSTS=($app_hosts)
-export BROKER_HOSTS=($amq_hosts)
-export GATEWAY_HOSTS=($fabric1_static)
+export BROKER_HOSTS=($MACHINE2)
+export APP_HOSTS=($MACHINE3)
+export GATEWAY_HOSTS=($MACHINE1)
 
 # Host OS paths
 export HOST_RH_HOME=/opt/rh
@@ -66,7 +65,7 @@ export JVM_GATEWAY_OPTS="-Xms512m -Xmx512m ${JVM_AGENT_OPTS} ${JVM_GC_OPTS}"
 
 # Root node config
 export ROOT_NODE_NAME=fabric-001
-export FABRIC_CREATE_CMD="fabric:create --force --clean --resolver manualip --manual-ip=10.20.1.11 --profile default --wait-for-provisioning"
+export FABRIC_CREATE_CMD="fabric:create --force --clean --resolver manualip --manual-ip=$MACHINE1 --profile default --wait-for-provisioning"
 
 export DOWNLOAD_FUSE_ZIP="false"
 export SHOULD_CLEAR_M2="true"

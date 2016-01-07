@@ -28,5 +28,9 @@ WHITE="\e[0m"
 
 echo -e $GREEN"Creating ${#GATEWAY_HOSTS[@]} gateways : ${GATEWAY_HOSTS[@]}"$WHITE
 
-karaf_client fabric:container-create-child --resolver manualip --manual-ip=10.20.1.21 --jvm-opts \"$JVM_GATEWAY_OPTS\" --profile gateway-http --profile gateway-mq $ROOT_NODE_NAME gwy-001
+echo -e $YELLOW"Downloading artifacts for profile gateway-http / gateway-mq to $HOME/.m2/repository/"$WHITE
+karaf_client fabric:profile-download-artifacts --profile gateway-http $HOME/.m2/repository/
+karaf_client fabric:profile-download-artifacts --profile gateway-mq $HOME/.m2/repository/
+
+karaf_client fabric:container-create-child --resolver manualip --manual-ip=$MACHINE1 --jvm-opts \"$JVM_GATEWAY_OPTS -Djava.rmi.server.hostname=$MACHINE1\" --profile gateway-http --profile gateway-mq $ROOT_NODE_NAME gwy-001
 wait_for_container_status "gwy-001" "started"

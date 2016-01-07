@@ -56,7 +56,7 @@ while getopts ":e:v:x:" opt; do
   esac
 done
 
-if [ $ARGS_COUNTER -gt 3 ]; then
+if [[ $ARGS_COUNTER -gt 3 ]]; then
     echo -e $RED"Illegal number of parameters: $ARGS_COUNTER"$WHITE
     echo -e $RED"Usage: ./post-profile-deploy.sh -e (environment) -v (version) -x (debug - optional)"$WHITE
     echo -e $RED"Example: ./post-profile-deploy.sh -e local -v 1.2 -x true"$WHITE
@@ -73,7 +73,7 @@ fi
 
 echo -e $GREEN"RELEASE_VERSION: $RELEASE_VERSION"$WHITE
 
-if [ "$DEBUG_MODE" == "true" ]; then
+if [[ "$DEBUG_MODE" == "true" ]]; then
     echo -e $GREEN"Debug mode"$WHITE
     set -x
 fi
@@ -86,7 +86,7 @@ echo ""
 
 karaf_commands
 
-if [ ! -d $HOST_RH_HOME ]; then
+if [[ ! -d $HOST_RH_HOME ]]; then
     echo -e $RED"$HOST_RH_HOME does not exist!"$WHITE
     exit 1
 fi

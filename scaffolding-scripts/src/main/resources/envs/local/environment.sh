@@ -41,8 +41,8 @@ export ROOT_NODE=($fabric1_static)
 export FUSE_HOSTS=($fabric1_static)
 export FABRIC_HOSTS=
 
-export APP_HOSTS=($app_hosts)
 export BROKER_HOSTS=($amq_hosts)
+export APP_HOSTS=($app_hosts)
 export GATEWAY_HOSTS=($fabric1_static)
 
 # Host OS paths

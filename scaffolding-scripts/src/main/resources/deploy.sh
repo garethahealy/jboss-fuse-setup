@@ -58,7 +58,7 @@ while getopts ":e:u:x:" opt; do
   esac
 done
 
-if [ $ARGS_COUNTER -gt 3 ]; then
+if [[ $ARGS_COUNTER -gt 3 ]]; then
     echo -e $RED"Illegal number of parameters: $ARGS_COUNTER"$WHITE
     echo -e $RED"Usage: ./deploy.sh -e (environment) -u (sshuser) -x (debug - optional)"$WHITE
     echo -e $RED"Example: ./deploy.sh -e local -u fuse -x true"$WHITE
@@ -75,7 +75,7 @@ fi
 
 echo -e $GREEN"SSH_USER: $SSH_USER"$WHITE
 
-if [ "$DEBUG_MODE" == "true" ]; then
+if [[ "$DEBUG_MODE" == "true" ]]; then
     echo -e $GREEN"Debug mode"$WHITE
     set -x
 fi
@@ -88,12 +88,12 @@ echo ""
 
 karaf_commands
 
-if [ ! -d $HOST_RH_HOME ]; then
+if [[ ! -d $HOST_RH_HOME ]]; then
     echo -e $RED"$HOST_RH_HOME does not exist!"$WHITE
     exit 1
 fi
 
-if [ -d "$HOST_FUSE_HOME/data" ]; then
+if [[ -d "$HOST_FUSE_HOME/data" ]]; then
     echo -e $RED"$HOST_FUSE_HOME/data already exists!"$WHITE
     read -n1 -r -p "If you continue, your current enviroment will be deleted!"
 fi
@@ -134,4 +134,3 @@ karaf_client jaas:update
 get_git_url
 
 echo -e $GREEN"Deploy $DEPLOYMENT_ENVIRONMENT: Done"$WHITE
-exit 0

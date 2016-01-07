@@ -60,7 +60,7 @@ while getopts ":e:u:x:" opt; do
   esac
 done
 
-if [ $ARGS_COUNTER -gt 3 ]; then
+if [[ $ARGS_COUNTER -gt 3 ]]; then
     echo -e $RED"Illegal number of parameters: $ARGS_COUNTER"$WHITE
     echo -e $RED"Usage: ./install-fuse.sh -e (environment) -u (sshuser) -x (debug - optional)"$WHITE
     echo -e $RED"Example: ./install-fuse.sh -e local -u fuse -x true"$WHITE
@@ -77,7 +77,7 @@ fi
 
 echo -e $GREEN"SSH_USER: $SSH_USER"$WHITE
 
-if [ "$DEBUG_MODE" == "true" ]; then
+if [[ "$DEBUG_MODE" == "true" ]]; then
     echo -e $GREEN"Debug mode"$WHITE
     set -x
 fi
@@ -95,37 +95,37 @@ SCRIPTS_FOLDER=$HOST_RH_HOME/scripts
 
 kill_karaf_instances
 
-if [ ! -d $HOST_RH_HOME ]; then
+if [[ ! -d $HOST_RH_HOME ]]; then
     echo -e $RED"$HOST_RH_HOME does not exist!"$WHITE
     exit 1
 fi
 
-if [ -d $HOST_FUSE_HOME ]; then
+if [[ -d $HOST_FUSE_HOME ]]; then
     echo -e $RED"$HOST_FUSE_HOME already exists!"$WHITE
     read -n1 -r -p "If you continue, your current enviroment will be deleted!"
 
     echo -e $YELLOW"Removing old: $HOST_FUSE_HOME"$WHITE
     rm -rf $HOST_FUSE_HOME
 
-    if [ -d $HOST_FUSE_HOME ]; then
+    if [[ -d $HOST_FUSE_HOME ]]; then
         echo -e $RED"Couldnt delete: $HOST_FUSE_HOME :: rm -rf $HOST_FUSE_HOME"$WHITE
         exit 1
     fi
 fi
 
 if [[ $DOWNLOAD_FUSE_ZIP == "true" ]]; then
-    if [ -a $HOST_RH_HOME/$FUSE_ZIP ]; then
+    if [[ -a $HOST_RH_HOME/$FUSE_ZIP ]]; then
         echo -e $YELLOW"Removing old: $HOST_RH_HOME/$FUSE_ZIP"$WHITE
         rm -rf $HOST_RH_HOME/$FUSE_ZIP
     fi
 fi
 
-if [ -a $SCAFFOLDING_ZIP ]; then
+if [[ -a $SCAFFOLDING_ZIP ]]; then
     echo -e $YELLOW"Removing old: $SCAFFOLDING_ZIP"$WHITE
     rm -f $SCAFFOLDING_ZIP
 fi
 
-if [ -d $SCRIPTS_FOLDER ]; then
+if [[ -d $SCRIPTS_FOLDER ]]; then
     echo -e $YELLOW"Removing old: $SCRIPTS_FOLDER"$WHITE
     rm -rf $SCRIPTS_FOLDER
 fi
@@ -156,7 +156,7 @@ else
         unzip $FUSE_ZIP
 fi
 
-if [ ! -d $HOST_FUSE_HOME ]; then
+if [[ ! -d $HOST_FUSE_HOME ]]; then
     echo -e $RED"$HOST_FUSE_HOME doesnt exist"$WHITE
     exit 1;
 fi
@@ -177,10 +177,4 @@ cat >> $HOST_FUSE_HOME/etc/users.properties <<EOT
 $KARAF_USER=$KARAF_PASSWORD,admin,manager,viewer,Monitor, Operator, Maintainer, Deployer, Auditor, Administrator, SuperUser
 EOT
 
-echo -e $GREEN"Executing scaffolding-scripts..."$WHITE
-
-cd $SCRIPTS_FOLDER &&
-    ./deploy.sh -e $DEPLOYMENT_ENVIRONMENT -u $SSH_USER
-
 echo -e $GREEN"Install fuse $DEPLOYMENT_ENVIRONMENT: Done"$WHITE
-exit 0

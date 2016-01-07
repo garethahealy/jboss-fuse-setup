@@ -136,6 +136,7 @@ function wait_for_container_status()
 	local CONTAINER=$1
 	local STATUS=$2
 	local OTHER_ARGS=$3
+	local CONTINUE_ON_FAILURE=$4
 
     echo -e $YELLOW"Waiting for fabric command: container-status"$WHITE
 	karaf_client "wait-for-command fabric container-status"
@@ -149,12 +150,17 @@ function wait_for_container_status()
     is_container_success=$(echo "$status_message" | grep -i -c "Overall Status: success")
     if (( $is_container_failed == 1 || $is_container_success == 0 )); then
         echo -e $RED"$CONTAINER has not reached status $STATUS. Check logs."$WHITE
-        exit 2
+        if [[ "$CONTINUE_ON_FAILURE" == "true" ]]; then
+            echo -e $RED"Continue on exit is set for $CONTAINER and status $STATUS."$WHITE
+        else
+            echo -e $RED"Exiting due to container in invalid state."$WHITE
+            exit 2
+        fi
     fi
 
     echo -e $YELLOW"Executing Karaf CMD: $CLIENT_INVOCATION \"container-connect $CONTAINER list\" | grep -F -i Failed 2> /dev/null"$WHITE
 	failed_bundles=$($CLIENT_INVOCATION "container-connect $CONTAINER list" | grep -F -i Failed 2> /dev/null)
-	if [ "x$failed_bundles" != "x" ]; then
+	if [[ "x$failed_bundles" != "x" ]]; then
 		echo -e $RED"$CONTAINER bundles in status \"Failed\": $failed_bundles"$WHITE
 	fi
 
@@ -191,7 +197,6 @@ function wait_for_ensemble()
 	echo ""
 
 	echo -e $GREEN"Ensemble became available in $(($time_elapsed  / 2)) seconds"$WHITE
-	set -x
 } # wait_for_ensemble
 
 ## useful function for initial fabric ensemble creation
@@ -206,7 +211,7 @@ function check_fabric_ensemble()
 	((num_live_nodes=num_live_nodes-1))
 	((ensemble_size=${#FABRIC_HOSTS[@]}+1))
 
-	if [ $num_live_nodes -eq $ensemble_size ]; then
+	if [[ $num_live_nodes -eq $ensemble_size ]]; then
 		echo -e $GREEN"Healthy ensemble"$WHITE
 		return $num_live_nodes
 	fi

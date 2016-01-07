@@ -28,5 +28,9 @@ WHITE="\e[0m"
 
 echo -e $GREEN"Creating ${#GATEWAY_HOSTS[@]} gateways : ${GATEWAY_HOSTS[@]}"$WHITE
 
-karaf_client fabric:container-create-ssh --host 10.20.1.11 --resolver manualip --manual-ip=10.20.1.11 --path $HOST_RH_HOME/containers --user $SSH_USER --jvm-opts \"$JVM_GATEWAY_OPTS\" --profile gateway-http --profile gateway-mq gwy-001
-wait_for_container_status "gwy-001" "started" "--wait 300000"
+echo -e $YELLOW"Downloading artifacts for profile gateway-http / gateway-mq to $HOME/.m2/repository/"$WHITE
+karaf_client fabric:profile-download-artifacts --profile gateway-http $HOME/.m2/repository/
+karaf_client fabric:profile-download-artifacts --profile gateway-mq $HOME/.m2/repository/
+
+karaf_client fabric:container-create-ssh --host $MACHINE1 --resolver manualip --manual-ip=$MACHINE1 --path $HOST_RH_HOME/containers --user $SSH_USER --jvm-opts \"$JVM_GATEWAY_OPTS -Djava.rmi.server.hostname=$MACHINE1\" --profile gateway-http --profile gateway-mq gwy-001
+wait_for_container_status "gwy-001" "started" "--wait 300000" "true"

@@ -20,16 +20,9 @@
 # #L%
 ###
 
-# Set colours
-GREEN="\e[32m"
-RED="\e[41m\e[37m\e[1m"
-YELLOW="\e[33m"
-WHITE="\e[0m"
+./install-fuse.sh "$@"
 
-echo -e $GREEN"Creating ${#BROKER_HOSTS[@]} brokers : ${BROKER_HOSTS[@]}"$WHITE
+cd /opt/rh/scripts/ &&
+    ./deploy.sh "$@"
 
-echo -e $YELLOW"Downloading artifacts for profile mq-amq to $HOME/.m2/repository/"$WHITE
-karaf_client fabric:profile-download-artifacts --profile mq-amq $HOME/.m2/repository/
-
-karaf_client fabric:container-create-child --resolver manualip --manual-ip=$MACHINE1 --jvm-opts \"$JVM_BROKER_OPTS -Djava.rmi.server.hostname=$MACHINE1\" --profile mq-amq $ROOT_NODE_NAME amq-001
-wait_for_container_status "amq-001" "started"
+exit 0;
