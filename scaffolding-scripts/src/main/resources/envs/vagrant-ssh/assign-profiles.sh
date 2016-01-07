@@ -30,6 +30,12 @@ karaf_commands
 
 echo -e $GREEN"Assigning profiles..."$WHITE
 
+echo -e $YELLOW"Downloading artifacts for profile garethahealy-gateway-http / garethahealy-gateway-mq / garethahealy-esb / garethahealy-amq to $HOME/.m2/repository/"$WHITE
+karaf_client fabric:profile-download-artifacts --profile garethahealy-gateway-http $HOME/.m2/repository/
+karaf_client fabric:profile-download-artifacts --profile garethahealy-gateway-mq $HOME/.m2/repository/
+karaf_client fabric:profile-download-artifacts --profile garethahealy-esb $HOME/.m2/repository/
+karaf_client fabric:profile-download-artifacts --profile garethahealy-amq $HOME/.m2/repository/
+
 echo -e $YELLOW"Waiting for fabric command: container-stop / container-remove-profile / container-add-profile / container-start"$WHITE
 karaf_client wait-for-command fabric container-stop
 karaf_client wait-for-command fabric container-remove-profile

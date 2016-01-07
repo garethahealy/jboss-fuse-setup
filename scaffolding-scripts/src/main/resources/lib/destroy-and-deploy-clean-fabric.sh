@@ -61,6 +61,9 @@ karaf_client wait-for-command fabric container-info
 karaf_client wait-for-command fabric profile-edit
 karaf_client wait-for-command fabric version-create
 
+echo -e $YELLOW"Downloading all artifacts to $HOME/.m2/repository/"$WHITE
+karaf_client fabric:profile-download-artifacts $HOME/.m2/repository/
+
 echo -e $GREEN"Creating version $RELEASE_VERSION"$WHITE
 karaf_client fabric:version-create --default $RELEASE_VERSION
 

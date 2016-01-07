@@ -104,12 +104,6 @@ karaf_client wait-for-command fabric version-set-default
 echo -e $YELLOW"Updating default version to $RELEASE_VERSION"$WHITE
 karaf_client fabric:version-set-default $RELEASE_VERSION
 
-echo -e $YELLOW"Waiting for fabric command: profile-download-artifacts"$WHITE
-karaf_client wait-for-command fabric profile-download-artifacts
-
-echo -e $YELLOW"Downloading all artifacts to $HOME/.m2/repository/"$WHITE
-karaf_client fabric:profile-download-artifacts $HOME/.m2/repository/
-
 . ./envs/$DEPLOYMENT_ENVIRONMENT/assign-profiles.sh
 
 echo -e $GREEN"Post profile deploy $DEPLOYMENT_ENVIRONMENT / $RELEASE_VERSION: Done"$WHITE

@@ -22,7 +22,8 @@
 set +x
 
 ## How to run:
-## cd /opt/rh/scripts && upgrade-to-release.sh test 1.2
+## cd /opt/rh/scripts
+##      && upgrade-to-release.sh -e local -v 1.2
 
 # Configure logging to print line numbers
 export PS4='+(${BASH_SOURCE}:${LINENO}): ${FUNCNAME[0]:+${FUNCNAME[0]}(): }'
