@@ -167,58 +167,25 @@ function wait_for_container_status()
 	echo -e $GREEN"$CONTAINER has status of $STATUS"$WHITE
 } # wait_for_container_status
 
-function wait_for_ensemble() 
+function wait_for_ensemble_healthy()
 {
-	local _MAX_WAITING=180
-	set +x
-	local time_elapsed=0
-	local is_ensemble_available=0
-	local ensemble_exists=0
-	((ensemble_size=${#FABRIC_HOSTS[@]}+1))
+    echo -e $YELLOW"Checking ensemble is healthy for ${FABRIC_HOSTS[@]}"$WHITE
+    for container in ${FABRIC_HOSTS[@]}; do
+        wait_for_container_status ${container} "started"
+    done
 
-	echo -n -e $YELLOW"Waiting (max ${_MAX_WAITING}s) for fabric ensemble with" $ensemble_size "servers to be available..."$WHITE
-	echo ""
-	while (( $is_ensemble_available <= 0 ))
-	do
-		sleep 5
-		time_elapsed=$((1 + $time_elapsed))
-		#printf "\r%-2d sec before forced timeout..." $(( $_MAX_WAITING - ( $time_elapsed / 2 ) ))
+    echo -e $YELLOW"Waiting for fabric command: ensemble-healthy"$WHITE
+	karaf_client "wait-for-command fabric ensemble-healthy"
 
-		status_message=$(check_fabric_ensemble)
-		printf "\r%-2d sec before forced timeout. Current Status: [%-60s] " "$(( $_MAX_WAITING - ( $time_elapsed / 2 ) ))" "$status_message"
-
-	    is_ensemble_available=$(echo "$status_message" | grep -c -i healthy )
-		if (( ($time_elapsed / 2 ) >= $_MAX_WAITING ))
-			then
-			echo -e $RED"Waited $(($time_elapsed  / 2)) seconds for ensemble. Launch aborted. "$WHITE
-			exit 1
-		fi
-	done
-	echo ""
-
-	echo -e $GREEN"Ensemble became available in $(($time_elapsed  / 2)) seconds"$WHITE
-} # wait_for_ensemble
-
-## useful function for initial fabric ensemble creation
-function check_fabric_ensemble()
-{
-	## execute fabric:ensemble list command to find member names
-    ENSEMBLE_LIST=$($CLIENT_INVOCATION "fabric:ensemble-list")
-    ENSEMBLE_LIST_ARRAY=(${ENSEMBLE_LIST//\\n/})
-
-	## ensemble-list command returns [id] header so reduce actual count by one. 
-	num_live_nodes=${#ENSEMBLE_LIST_ARRAY[@]}
-	((num_live_nodes=num_live_nodes-1))
-	((ensemble_size=${#FABRIC_HOSTS[@]}+1))
-
-	if [[ $num_live_nodes -eq $ensemble_size ]]; then
-		echo -e $GREEN"Healthy ensemble"$WHITE
-		return $num_live_nodes
-	fi
-
-	echo -e $RED"broken ensemble values are: ENSEMBLE_LIST_ARRAY: ${ENSEMBLE_LIST_ARRAY[@]},num_live_nodes=$num_live_nodes,ensemble_size=$ensemble_size"$WHITE
-	return $num_live_nodes
-}
+    echo -e $YELLOW"Executing Karaf CMD: $CLIENT_INVOCATION \"fabric:ensemble-healthy ${FABRIC_HOSTS[@]}\""$WHITE
+    status_message=$($CLIENT_INVOCATION "fabric:ensemble-healthy ${FABRIC_HOSTS[@]}")
+    is_ensemble_success=$(echo "$status_message" | grep -i -c "Ensemble Healthy: success")
+    if [[ $is_ensemble_success == 0 ]]; then
+        echo -e $RED"Ensemble ${FABRIC_HOSTS[@]} is not healthy. Check logs."$WHITE
+        echo -e $RED"Exiting due to ensemble state."$WHITE
+        exit 2;
+    fi
+} #wait_for_ensemble_healthy
 
 function get_git_url()
 {

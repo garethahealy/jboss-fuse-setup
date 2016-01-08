@@ -28,9 +28,6 @@ WHITE="\e[0m"
 
 echo -e $GREEN"Creating ensemble"$WHITE
 
-echo -e $YELLOW"Downloading artifacts for profile default to $HOME/.m2/repository/"$WHITE
-karaf_client fabric:profile-download-artifacts --profile default $HOME/.m2/repository/
-
 karaf_client fabric:container-create-ssh --host $MACHINE2 --resolver manualip --manual-ip=$MACHINE2 --path $HOST_RH_HOME/containers --user $SSH_USER --jvm-opts \"$JVM_APP_OPTS -Djava.rmi.server.hostname=$MACHINE2\" --profile default fabric-002
 karaf_client fabric:container-create-ssh --host $MACHINE3 --resolver manualip --manual-ip=$MACHINE3 --path $HOST_RH_HOME/containers --user $SSH_USER --jvm-opts \"$JVM_APP_OPTS -Djava.rmi.server.hostname=$MACHINE3\" --profile default fabric-003
 
@@ -38,4 +35,4 @@ wait_for_container_status "fabric-002" "started" "--wait 300000"
 wait_for_container_status "fabric-003" "started" "--wait 300000"
 
 karaf_client fabric:ensemble-add --force fabric-002 fabric-003
-wait_for_ensemble
+wait_for_ensemble_healthy

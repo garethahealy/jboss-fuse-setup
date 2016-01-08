@@ -69,3 +69,7 @@ export FABRIC_CREATE_CMD="fabric:create --force --clean --resolver manualip --gl
 
 export DOWNLOAD_FUSE_ZIP="true"
 export SHOULD_CLEAR_M2="false"
+
+# Whether to call profile-download-artifacts
+export DOWNLOAD_ALL_FOR_ROOT="false"
+export DOWNLOAD_ALL_FOR_SSH="false"

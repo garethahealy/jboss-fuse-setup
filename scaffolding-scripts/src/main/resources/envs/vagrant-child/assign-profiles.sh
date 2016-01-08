@@ -30,17 +30,28 @@ karaf_commands
 
 echo -e $GREEN"Assigning profiles..."$WHITE
 
-echo -e $YELLOW"Downloading artifacts for profile garethahealy-gateway-http / garethahealy-gateway-mq / garethahealy-esb / garethahealy-amq to $HOME/.m2/repository/"$WHITE
-karaf_client fabric:profile-download-artifacts --profile garethahealy-gateway-http $HOME/.m2/repository/
-karaf_client fabric:profile-download-artifacts --profile garethahealy-gateway-mq $HOME/.m2/repository/
-karaf_client fabric:profile-download-artifacts --profile garethahealy-esb $HOME/.m2/repository/
-karaf_client fabric:profile-download-artifacts --profile garethahealy-amq $HOME/.m2/repository/
-
-echo -e $YELLOW"Waiting for fabric command: container-stop / container-remove-profile / container-add-profile / container-start"$WHITE
+echo -e $YELLOW"Waiting for fabric command: profile-download-artifacts / container-stop / container-remove-profile / container-add-profile / container-start"$WHITE
+karaf_client wait-for-command fabric profile-download-artifacts
 karaf_client wait-for-command fabric container-stop
 karaf_client wait-for-command fabric container-remove-profile
 karaf_client wait-for-command fabric container-add-profile
 karaf_client wait-for-command fabric container-start
+
+if [[ $DOWNLOAD_ALL_FOR_ROOT == "true" ]]; then
+    echo -e $YELLOW"Downloading artifacts for profile garethahealy-gateway-http / garethahealy-gateway-mq / garethahealy-esb / garethahealy-amq to $HOME/.m2/repository/ for root"$WHITE
+    karaf_client fabric:profile-download-artifacts --threads 4 --verbose --profile garethahealy-gateway-http $HOME/.m2/repository/
+    karaf_client fabric:profile-download-artifacts --threads 4 --verbose --profile garethahealy-gateway-mq $HOME/.m2/repository/
+    karaf_client fabric:profile-download-artifacts --threads 4 --verbose --profile garethahealy-esb $HOME/.m2/repository/
+    karaf_client fabric:profile-download-artifacts --threads 4 --verbose --profile garethahealy-amq $HOME/.m2/repository/
+fi
+
+if [[ $DOWNLOAD_ALL_FOR_SSH == "true" ]]; then
+    echo -e $YELLOW"Downloading artifacts for profile garethahealy-gateway-http / garethahealy-gateway-mq / garethahealy-esb / garethahealy-amq to $HOME/.m2/repository/ for containers"$WHITE
+    karaf_client fabric:container-connect gwy-001 \"fabric:profile-download-artifacts --threads 4 --verbose --profile garethahealy-gateway-http $HOME/.m2/repository/\"
+    karaf_client fabric:container-connect gwy-001 \"fabric:profile-download-artifacts --threads 4 --verbose --profile garethahealy-gateway-mq $HOME/.m2/repository/\"
+    karaf_client fabric:container-connect esb-001 \"fabric:profile-download-artifacts --threads 4 --verbose --profile garethahealy-esb $HOME/.m2/repository/\"
+    karaf_client fabric:container-connect amq-001 \"fabric:profile-download-artifacts --threads 4 --verbose --profile garethahealy-amq $HOME/.m2/repository/\"
+fi
 
 karaf_client fabric:container-stop --force gwy-001
 karaf_client fabric:container-stop --force esb-001

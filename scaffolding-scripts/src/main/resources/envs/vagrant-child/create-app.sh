@@ -28,8 +28,5 @@ WHITE="\e[0m"
 
 echo -e $GREEN"Creating ${#APP_HOSTS[@]} apps : ${APP_HOSTS[@]}"$WHITE
 
-echo -e $YELLOW"Downloading artifacts for profile jboss-fuse-minimal to $HOME/.m2/repository/"$WHITE
-karaf_client fabric:profile-download-artifacts --profile jboss-fuse-minimal $HOME/.m2/repository/
-
 karaf_client fabric:container-create-child --resolver manualip --manual-ip=$MACHINE1 --jvm-opts \"$JVM_APP_OPTS -Djava.rmi.server.hostname=$MACHINE1\" --profile jboss-fuse-minimal $ROOT_NODE_NAME esb-001
 wait_for_container_status "esb-001" "started"

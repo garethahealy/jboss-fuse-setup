@@ -28,8 +28,5 @@ WHITE="\e[0m"
 
 echo -e $GREEN"Creating ${#BROKER_HOSTS[@]} brokers : ${BROKER_HOSTS[@]}"$WHITE
 
-echo -e $YELLOW"Downloading artifacts for profile mq-amq to $HOME/.m2/repository/"$WHITE
-karaf_client fabric:profile-download-artifacts --profile mq-amq $HOME/.m2/repository/
-
 karaf_client fabric:container-create-child --resolver manualip --manual-ip=$MACHINE1 --jvm-opts \"$JVM_BROKER_OPTS -Djava.rmi.server.hostname=$MACHINE1\" --profile mq-amq $ROOT_NODE_NAME amq-001
 wait_for_container_status "amq-001" "started"

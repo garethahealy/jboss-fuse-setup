@@ -127,9 +127,7 @@ echo -e $YELLOW"Waiting for jaas command: manage / useradd / update"$WHITE
 karaf_client wait-for-command jaas manage
 karaf_client wait-for-command jaas useradd
 karaf_client wait-for-command jaas update
-karaf_client jaas:manage --index 1
-karaf_client jaas:useradd $AMQ_INTERNAL_USER $AMQ_INTERNAL_PASSWORD
-karaf_client jaas:update
+karaf_client jaas:manage --index 1\; jaas:useradd $AMQ_INTERNAL_USER $AMQ_INTERNAL_PASSWORD\; jaas:update
 
 get_git_url
 

@@ -61,9 +61,6 @@ karaf_client wait-for-command fabric container-info
 karaf_client wait-for-command fabric profile-edit
 karaf_client wait-for-command fabric version-create
 
-echo -e $YELLOW"Downloading all artifacts to $HOME/.m2/repository/"$WHITE
-karaf_client fabric:profile-download-artifacts $HOME/.m2/repository/
-
 echo -e $GREEN"Creating version $RELEASE_VERSION"$WHITE
 karaf_client fabric:version-create --default $RELEASE_VERSION
 
@@ -86,13 +83,13 @@ echo -e $GREEN"Upgrading container to $RELEASE_VERSION"$WHITE
 karaf_client fabric:container-upgrade $RELEASE_VERSION $ROOT_NODE_NAME
 
 # Install container-status command
-karaf_client fabric:profile-create --parents fabric com-garethahealy-commands-containerstatus
-karaf_client fabric:profile-edit --repository mvn:com.garethahealy.fuse/container-status/1.0.0-SNAPSHOT/xml/features com-garethahealy-commands-containerstatus
-karaf_client fabric:profile-edit --feature container-status com-garethahealy-commands-containerstatus
-karaf_client fabric:container-add-profile $ROOT_NODE_NAME com-garethahealy-commands-containerstatus
+karaf_client fabric:profile-create --parents fabric com-garethahealy-fabriccommands
+karaf_client fabric:profile-edit --repository mvn:com.garethahealy.fuse/container-status/1.0.0/xml/features com-garethahealy-fabriccommands
+karaf_client fabric:profile-edit --repository mvn:com.garethahealy.fuse/ensemble-healthy/1.0.0/xml/features com-garethahealy-fabriccommands
+karaf_client fabric:profile-edit --feature container-status com-garethahealy-fabriccommands
+karaf_client fabric:profile-edit --feature ensemble-healthy com-garethahealy-fabriccommands
 
-echo -e $YELLOW"Waiting for fabric command: container-status"$WHITE
-karaf_client wait-for-command fabric container-status
+karaf_client fabric:container-add-profile $ROOT_NODE_NAME com-garethahealy-fabriccommands
 
 wait_for_container_status "$ROOT_NODE_NAME" "started"
 

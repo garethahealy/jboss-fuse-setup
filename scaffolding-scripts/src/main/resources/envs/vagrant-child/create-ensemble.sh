@@ -27,6 +27,3 @@ YELLOW="\e[33m"
 WHITE="\e[0m"
 
 echo -e $GREEN"No ensemble for this environment"$WHITE
-
-echo -e $YELLOW"Downloading artifacts for profile default to $HOME/.m2/repository/"$WHITE
-karaf_client fabric:profile-download-artifacts --profile default $HOME/.m2/repository/

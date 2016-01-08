@@ -20,8 +20,8 @@
 # #L%
 ###
 
-#'vagrant up' sets the IP as an environment varible in .bash_profile
-#export NEXUS_IP
+#'vagrant up' sets the IP in /etc/hosts
+export NEXUS_IP=gareths-macbook
 
 # Maven Repo
 export REMOTE_MAVEN_REPOSITORY='file:\${runtime.home}/\${karaf.default.repository}@snapshots@id=karaf-default, file:\${runtime.data}/maven/upload@snapshots@id=fabric-upload, http://'$NEXUS_IP':8081/nexus/content/groups/public@snapshots@id=local.nexus.public'
@@ -67,3 +67,7 @@ export FABRIC_CREATE_CMD="fabric:create --force --clean --resolver manualip --gl
 
 export DOWNLOAD_FUSE_ZIP="false"
 export SHOULD_CLEAR_M2="false"
+
+# Whether to call profile-download-artifacts
+export DOWNLOAD_ALL_FOR_ROOT="false"
+export DOWNLOAD_ALL_FOR_SSH="false"
