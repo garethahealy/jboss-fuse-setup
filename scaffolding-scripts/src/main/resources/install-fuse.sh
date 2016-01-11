@@ -41,29 +41,27 @@ WHITE="\e[0m"
 read -n1 -r -p "Press the any key..."
 
 ARGS_COUNTER=0
-while getopts ":e:u:x:" opt; do
+while getopts ":e:x:" opt; do
   ARGS_COUNTER=$[$ARGS_COUNTER +1]
 
   case $opt in
     e) export DEPLOYMENT_ENVIRONMENT=$OPTARG
     ;;
-    u) export SSH_USER=$OPTARG
-    ;;
     x) export DEBUG_MODE="true"
     ;;
     \?)
     echo -e $RED"Illegal parameters: -$OPTARG"$WHITE
-    echo -e $RED"Usage: ./install-fuse.sh -e (environment) -u (sshuser) -x (debug - optional)"$WHITE
-    echo -e $RED"Example: ./install-fuse.sh -e local -u fuse -x true"$WHITE
+    echo -e $RED"Usage: ./install-fuse.sh -e (environment) -x (debug - optional)"$WHITE
+    echo -e $RED"Example: ./install-fuse.sh -e local -x true"$WHITE
     exit 1
     ;;
   esac
 done
 
-if [[ $ARGS_COUNTER -gt 3 ]]; then
+if [[ $ARGS_COUNTER -gt 2 ]]; then
     echo -e $RED"Illegal number of parameters: $ARGS_COUNTER"$WHITE
-    echo -e $RED"Usage: ./install-fuse.sh -e (environment) -u (sshuser) -x (debug - optional)"$WHITE
-    echo -e $RED"Example: ./install-fuse.sh -e local -u fuse -x true"$WHITE
+    echo -e $RED"Usage: ./install-fuse.sh -e (environment) -x (debug - optional)"$WHITE
+    echo -e $RED"Example: ./install-fuse.sh -e local -x true"$WHITE
     exit 1
 fi
 
@@ -74,8 +72,6 @@ else
     echo -e $RED"Environment \"$DEPLOYMENT_ENVIRONMENT\" not supported. Expected: ${SUPPORTED_ENVS_ARRAY[@]}"$WHITE
     exit 1
 fi
-
-echo -e $GREEN"SSH_USER: $SSH_USER"$WHITE
 
 if [[ "$DEBUG_MODE" == "true" ]]; then
     echo -e $GREEN"Debug mode"$WHITE

@@ -21,7 +21,7 @@
 ###
 
 #'vagrant up' sets the IP in /etc/hosts
-export NEXUS_IP=gareths-macbook
+export NEXUS_IP=hostmanager-vagrant.local
 
 # Maven Repo
 export REMOTE_MAVEN_REPOSITORY='file:\${runtime.home}/\${karaf.default.repository}@snapshots@id=karaf-default, file:\${runtime.data}/maven/upload@snapshots@id=fabric-upload, http://'$NEXUS_IP':8081/nexus/content/groups/public@snapshots@id=local.nexus.public'

@@ -12,7 +12,7 @@
     <groupId>com.garethahealy.fuse-setup</groupId>
     <artifactId>jboss-fuse-setup-parent</artifactId>
     <packaging>pom</packaging>
-    <version>1.0.0</version>
+    <version>1.0.1</version>
     <name>GarethHealy :: JBoss Fuse Setup</name>
 
     <scm>
