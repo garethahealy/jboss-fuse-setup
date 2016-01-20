@@ -4,15 +4,15 @@
 
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <groupId>com.garethahealy</groupId>
+        <groupId>com.garethahealy.poms</groupId>
         <artifactId>osgi-plugins-parent</artifactId>
-        <version>1.1.0</version>
+        <version>1.0.0</version>
         <relativePath/>
     </parent>
-    <groupId>com.garethahealy.fuse-setup</groupId>
+    <groupId>com.garethahealy.jboss-fuse-setup</groupId>
     <artifactId>jboss-fuse-setup-parent</artifactId>
     <packaging>pom</packaging>
-    <version>1.0.1</version>
+    <version>1.0.3</version>
     <name>GarethHealy :: JBoss Fuse Setup</name>
 
     <scm>

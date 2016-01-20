@@ -20,9 +20,35 @@
 # #L%
 ###
 
-./install-fuse.sh "$@"
+## How to run:
+## cd /opt/rh/scripts
+##       && ./install-fuse-and-deploy.sh -e local -u fuse
+
+DEBUG_MODE=false
+
+ARGS_COUNTER=0
+while getopts ":e:u:x:" opt; do
+  ARGS_COUNTER=$[$ARGS_COUNTER +1]
+
+  case $opt in
+    e) DEPLOYMENT_ENVIRONMENT=$OPTARG
+    ;;
+    x) SSH_USER=$OPTARG
+    ;;
+    x) DEBUG_MODE=$OPTARG
+    ;;
+    \?)
+    echo -e $RED"Illegal parameters: -$OPTARG"$WHITE
+    echo -e $RED"Usage: ./install-fuse-and-deploy.sh -e (environment) -u (sshuser) -x (debug - optional)"$WHITE
+    echo -e $RED"Example: ./install-fuse-and-deploy.sh -e local -u fuse -x true"$WHITE
+    exit 1
+    ;;
+  esac
+done
+
+./install-fuse.sh -e $DEPLOYMENT_ENVIRONMENT -x $DEBUG_MODE
 
 cd /opt/rh/scripts/ &&
-    ./deploy.sh "$@"
+    ./deploy.sh -e $DEPLOYMENT_ENVIRONMENT -u $SSH_USER -x $DEBUG_MODE
 
 exit 0;

@@ -23,7 +23,7 @@ set +x
 
 ## How to run:
 ## cd /opt/rh/scripts
-##      && upgrade-to-release.sh -e local -v 1.2
+##      && ./upgrade-to-release.sh -e local -v 1.2
 
 # Configure logging to print line numbers
 export PS4='+(${BASH_SOURCE}:${LINENO}): ${FUNCNAME[0]:+${FUNCNAME[0]}(): }'
@@ -45,7 +45,7 @@ while getopts ":e:v:x:" opt; do
     ;;
     v) export RELEASE_VERSION=$OPTARG
     ;;
-    x) export DEBUG_MODE="true"
+    x) export DEBUG_MODE=$OPTARG
     ;;
     \?)
     echo -e $RED"Illegal parameters: -$OPTARG"$WHITE

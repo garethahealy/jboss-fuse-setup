@@ -42,7 +42,7 @@ while getopts ":e:x:" opt; do
   case $opt in
     e) export DEPLOYMENT_ENVIRONMENT=$OPTARG
     ;;
-    x) export DEBUG_MODE="true"
+    x) export DEBUG_MODE=$OPTARG
     ;;
     \?)
     echo -e $RED"Illegal parameters: -$OPTARG"$WHITE

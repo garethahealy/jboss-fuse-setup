@@ -23,7 +23,7 @@ set +x
 
 ## How to run:
 ## cd /opt/rh/scripts
-##       && deploy.sh -e local -u fuse
+##       && ./deploy.sh -e local -u fuse
 
 # Configure logging to print line numbers
 export PS4='+(${BASH_SOURCE}:${LINENO}): ${FUNCNAME[0]:+${FUNCNAME[0]}(): }'
@@ -47,7 +47,7 @@ while getopts ":e:u:x:" opt; do
     ;;
     u) export SSH_USER=$OPTARG
     ;;
-    x) export DEBUG_MODE=true
+    x) export DEBUG_MODE=$OPTARG
     ;;
     \?)
     echo -e $RED"Illegal parameters: -$OPTARG"$WHITE
@@ -131,4 +131,5 @@ karaf_client jaas:manage --index 1\; jaas:useradd $AMQ_INTERNAL_USER $AMQ_INTERN
 
 get_git_url
 
-echo -e $GREEN"Deploy $DEPLOYMENT_ENVIRONMENT: Done"$WHITE
+echo -e $GREEN"Deploy $DEPLOYMENT_ENVIRONMENT Done"$WHITE
+exit 0

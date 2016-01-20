@@ -4,15 +4,28 @@
 
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <groupId>com.garethahealy.fuse-setup</groupId>
+        <groupId>com.garethahealy.jboss-fuse-setup</groupId>
         <artifactId>jboss-fuse-setup-parent</artifactId>
-        <version>1.0.1</version>
+        <version>1.0.3</version>
         <relativePath>../</relativePath>
-	</parent>
-	<packaging>pom</packaging>
-	<artifactId>scaffolding-scripts</artifactId>
-	<name>GarethHealy :: JBoss Fuse Setup :: Scaffolding Scripts</name>
+    </parent>
+    <packaging>pom</packaging>
+    <artifactId>scaffolding-scripts</artifactId>
+    <name>GarethHealy :: JBoss Fuse Setup :: Scaffolding Scripts</name>
 
+    <dependencies>
+        <dependency>
+            <groupId>com.garethahealy.karaf-commands</groupId>
+            <artifactId>container-status</artifactId>
+            <version>1.0.1</version>
+        </dependency>
+        <dependency>
+            <groupId>com.garethahealy.karaf-commands</groupId>
+            <artifactId>ensemble-healthy</artifactId>
+            <version>1.0.1</version>
+        </dependency>
+    </dependencies>
+    
     <build>
         <defaultGoal>install</defaultGoal>
         <resources>

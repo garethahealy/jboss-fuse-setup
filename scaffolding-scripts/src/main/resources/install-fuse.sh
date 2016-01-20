@@ -27,7 +27,7 @@ set +x
 ##      unzip scaffolding-scripts-*-all.zip &&
 ##      cd scripts &&
 ##      chmod -R 755 install-fuse.sh &&
-##      install-fuse.sh -e local -u fuse
+##      ./install-fuse.sh -e local
 
 # Configure logging to print line numbers
 export PS4='+(${BASH_SOURCE}:${LINENO}): ${FUNCNAME[0]:+${FUNCNAME[0]}(): }'
@@ -47,7 +47,7 @@ while getopts ":e:x:" opt; do
   case $opt in
     e) export DEPLOYMENT_ENVIRONMENT=$OPTARG
     ;;
-    x) export DEBUG_MODE="true"
+    x) export DEBUG_MODE=$OPTARG
     ;;
     \?)
     echo -e $RED"Illegal parameters: -$OPTARG"$WHITE
@@ -173,4 +173,5 @@ cat >> $HOST_FUSE_HOME/etc/users.properties <<EOT
 $KARAF_USER=$KARAF_PASSWORD,admin,manager,viewer,Monitor, Operator, Maintainer, Deployer, Auditor, Administrator, SuperUser
 EOT
 
-echo -e $GREEN"Install fuse $DEPLOYMENT_ENVIRONMENT: Done"$WHITE
+echo -e $GREEN"Install fuse $DEPLOYMENT_ENVIRONMENT Done"$WHITE
+exit 0
