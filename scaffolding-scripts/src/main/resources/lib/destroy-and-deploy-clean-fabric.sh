@@ -84,8 +84,8 @@ karaf_client fabric:container-upgrade $RELEASE_VERSION $ROOT_NODE_NAME
 
 # Install container-status command
 karaf_client fabric:profile-create --parents fabric com-garethahealy-fabriccommands
-karaf_client fabric:profile-edit --repository mvn:com.garethahealy.karaf-commands/container-status/1.0.1/xml/features com-garethahealy-fabriccommands
-karaf_client fabric:profile-edit --repository mvn:com.garethahealy.karaf-commands/ensemble-healthy/1.0.1/xml/features com-garethahealy-fabriccommands
+karaf_client fabric:profile-edit --repository mvn:com.garethahealy.karaf-commands/container-status/1.0.2/xml/features com-garethahealy-fabriccommands
+karaf_client fabric:profile-edit --repository mvn:com.garethahealy.karaf-commands/ensemble-healthy/1.0.2/xml/features com-garethahealy-fabriccommands
 karaf_client fabric:profile-edit --feature container-status com-garethahealy-fabriccommands
 karaf_client fabric:profile-edit --feature ensemble-healthy com-garethahealy-fabriccommands
 

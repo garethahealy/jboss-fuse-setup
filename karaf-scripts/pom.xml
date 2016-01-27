@@ -6,7 +6,7 @@
     <parent>
         <groupId>com.garethahealy.jboss-fuse-setup</groupId>
         <artifactId>jboss-fuse-setup-parent</artifactId>
-        <version>1.0.3</version>
+        <version>1.0.4</version>
         <relativePath>../</relativePath>
     </parent>
     <packaging>bundle</packaging>

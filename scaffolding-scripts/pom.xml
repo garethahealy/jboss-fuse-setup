@@ -6,7 +6,7 @@
     <parent>
         <groupId>com.garethahealy.jboss-fuse-setup</groupId>
         <artifactId>jboss-fuse-setup-parent</artifactId>
-        <version>1.0.3</version>
+        <version>1.0.4</version>
         <relativePath>../</relativePath>
     </parent>
     <packaging>pom</packaging>
@@ -17,12 +17,14 @@
         <dependency>
             <groupId>com.garethahealy.karaf-commands</groupId>
             <artifactId>container-status</artifactId>
-            <version>1.0.1</version>
+            <version>1.0.2</version>
+            <type>jar</type>
         </dependency>
         <dependency>
             <groupId>com.garethahealy.karaf-commands</groupId>
             <artifactId>ensemble-healthy</artifactId>
-            <version>1.0.1</version>
+            <version>1.0.2</version>
+            <type>jar</type>
         </dependency>
     </dependencies>
     
