@@ -1,4 +1,4 @@
-source mvn:com.garethahealy/karaf-scripts/1.0.0-SNAPSHOT/karaf/_constants
+source mvn:com.garethahealy.jboss-fuse-setup/karaf-scripts/1.0.4/karaf/_constants
 
 # Create a new profile version, so changes do not effect any containers until they are upgraded
 fabric:version-create --default
@@ -7,7 +7,7 @@ fabric:version-create --default
 fabric:profile-create --parents jboss-fuse-minimal $ESB_PROFILE_NAME
 
 # Add the examples features
-fabric:profile-edit --repositories mvn:com.garethahealy/examples-features/1.0.0-SNAPSHOT/xml/features $ESB_PROFILE_NAME
+fabric:profile-edit --repositories mvn:com.garethahealy.jboss-fuse-examples/examples-features/1.0.0-SNAPSHOT/xml/features $ESB_PROFILE_NAME
 
 # Create a profile for the AMQ
 fabric:profile-create --parents mq-base $AMQ_PROFILE_NAME

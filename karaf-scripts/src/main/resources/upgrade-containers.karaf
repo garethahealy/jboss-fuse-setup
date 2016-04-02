@@ -1,4 +1,4 @@
-source mvn:com.garethahealy/karaf-scripts/1.0.0-SNAPSHOT/karaf/_constants
+source mvn:com.garethahealy.jboss-fuse-setup/karaf-scripts/1.0.4/karaf/_constants
 
 # Upgrade the containers so they have access to the latest profiles
 fabric:container-upgrade 1.1 $ROOT_CONTAINER_NAME
