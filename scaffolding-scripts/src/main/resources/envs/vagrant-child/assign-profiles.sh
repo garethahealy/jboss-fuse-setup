@@ -41,16 +41,16 @@ if [[ $DOWNLOAD_ALL_FOR_ROOT == "true" ]]; then
     echo -e $YELLOW"Downloading artifacts for profile garethahealy-gateway-http / garethahealy-gateway-mq / garethahealy-esb / garethahealy-amq to $HOME/.m2/repository/ for root"$WHITE
     karaf_client fabric:profile-download-artifacts --threads 4 --verbose --profile garethahealy-gateway-http $HOME/.m2/repository/
     karaf_client fabric:profile-download-artifacts --threads 4 --verbose --profile garethahealy-gateway-mq $HOME/.m2/repository/
-    karaf_client fabric:profile-download-artifacts --threads 4 --verbose --profile garethahealy-esb $HOME/.m2/repository/
-    karaf_client fabric:profile-download-artifacts --threads 4 --verbose --profile garethahealy-amq $HOME/.m2/repository/
+    karaf_client fabric:profile-download-artifacts --threads 4 --verbose --profile com-garethahealy-esb-uk $HOME/.m2/repository/
+    karaf_client fabric:profile-download-artifacts --threads 4 --verbose --profile com-garethahealy-amq-uk $HOME/.m2/repository/
 fi
 
 if [[ $DOWNLOAD_ALL_FOR_SSH == "true" ]]; then
     echo -e $YELLOW"Downloading artifacts for profile garethahealy-gateway-http / garethahealy-gateway-mq / garethahealy-esb / garethahealy-amq to $HOME/.m2/repository/ for containers"$WHITE
     karaf_client fabric:container-connect gwy-001 \"fabric:profile-download-artifacts --threads 4 --verbose --profile garethahealy-gateway-http $HOME/.m2/repository/\"
     karaf_client fabric:container-connect gwy-001 \"fabric:profile-download-artifacts --threads 4 --verbose --profile garethahealy-gateway-mq $HOME/.m2/repository/\"
-    karaf_client fabric:container-connect esb-001 \"fabric:profile-download-artifacts --threads 4 --verbose --profile garethahealy-esb $HOME/.m2/repository/\"
-    karaf_client fabric:container-connect amq-001 \"fabric:profile-download-artifacts --threads 4 --verbose --profile garethahealy-amq $HOME/.m2/repository/\"
+    karaf_client fabric:container-connect esb-001 \"fabric:profile-download-artifacts --threads 4 --verbose --profile com-garethahealy-esb-uk $HOME/.m2/repository/\"
+    karaf_client fabric:container-connect amq-001 \"fabric:profile-download-artifacts --threads 4 --verbose --profile com-garethahealy-amq-uk $HOME/.m2/repository/\"
 fi
 
 karaf_client fabric:container-stop --force gwy-001
@@ -66,8 +66,8 @@ karaf_client fabric:container-remove-profile esb-001 jboss-fuse-minimal
 karaf_client fabric:container-remove-profile amq-001 mq-amq
 
 karaf_client fabric:container-add-profile gwy-001 garethahealy-gateway-http garethahealy-gateway-mq
-karaf_client fabric:container-add-profile esb-001 garethahealy-esb
-karaf_client fabric:container-add-profile amq-001 garethahealy-amq
+karaf_client fabric:container-add-profile esb-001 com-garethahealy-esb-uk
+karaf_client fabric:container-add-profile amq-001 com-garethahealy-amq-uk
 
 karaf_client fabric:container-start --force amq-001
 karaf_client fabric:container-start --force esb-001

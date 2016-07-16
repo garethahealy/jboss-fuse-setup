@@ -49,8 +49,8 @@ karaf_client fabric:container-remove-profile esb-001 jboss-fuse-minimal
 karaf_client fabric:container-remove-profile amq-001 mq-amq
 
 karaf_client fabric:container-add-profile gwy-001 garethahealy-gateway-http garethahealy-gateway-mq
-karaf_client fabric:container-add-profile esb-001 garethahealy-esb
-karaf_client fabric:container-add-profile amq-001 garethahealy-amq
+karaf_client fabric:container-add-profile esb-001 com-garethahealy-esb-uk
+karaf_client fabric:container-add-profile amq-001 com-garethahealy-amq-uk
 
 karaf_client fabric:container-start --force amq-001
 karaf_client fabric:container-start --force esb-001
