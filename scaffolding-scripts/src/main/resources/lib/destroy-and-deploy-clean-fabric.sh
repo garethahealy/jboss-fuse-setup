@@ -68,7 +68,6 @@ echo -e $GREEN"Applying base config for mvn and logging"$WHITE
 
 # Set maven repos
 karaf_client fabric:profile-edit --pid io.fabric8.agent/org.ops4j.pax.url.mvn.repositories=\"$REMOTE_MAVEN_REPOSITORY\" default
-karaf_client fabric:profile-edit --pid io.fabric8.agent/patch.repositories=\"$PATCH_MAVEN_REPOSITORY\" default
 
 # Increase debugging
 karaf_client fabric:profile-edit --append --pid org.ops4j.pax.logging/log4j.logger.org.apache.sshd.common.io.nio2.Nio2Session=INFO karaf
