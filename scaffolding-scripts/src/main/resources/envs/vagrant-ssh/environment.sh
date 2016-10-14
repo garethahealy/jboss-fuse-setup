@@ -24,9 +24,8 @@
 export NEXUS_IP=hostmanager-vagrant.local
 
 # Maven Repo
-export REMOTE_MAVEN_REPOSITORY='file:\${runtime.home}/\${karaf.default.repository}@snapshots@id=karaf-default, file:\${runtime.data}/maven/upload@snapshots@id=fabric-upload, http://'$NEXUS_IP':8081/nexus/content/groups/public@snapshots@id=local.nexus.public'
-export MAVEN_REPOSITORY='file:\${runtime.home}/\${karaf.default.repository}@snapshots@id=karaf-default, file:\${runtime.data}/maven/upload@snapshots@id=fabric-upload, http://'$NEXUS_IP':8081/nexus/content/groups/public@id=local.nexus.public, http://'$NEXUS_IP':8081/nexus/content/repositories/releases@id=local.nexus.releases, http://'$NEXUS_IP':8081/nexus/content/repositories/snapshots@snapshots@id=local.nexus.snapshots'
-export PATCH_MAVEN_REPOSITORY="http://$NEXUS_IP:8081/nexus/content/repositories/fusesource-ea@id=local.nexus.fusesource.ea, http://$NEXUS_IP:8081/nexus/content/repositories/fusesource-release@id=local.nexus.fusesource.release"
+export REMOTE_MAVEN_REPOSITORY='http://'$NEXUS_IP':8081/nexus/content/groups/jboss-fuse@id=local.nexus.jboss.fuse'
+export MAVEN_REPOSITORY='http://'$NEXUS_IP':8081/nexus/content/groups/jboss-fuse@id=local.nexus.jboss.fuse, http://'$NEXUS_IP':8081/nexus/content/groups/public@id=local.nexus.public, http://'$NEXUS_IP':8081/nexus/content/repositories/releases@id=local.nexus.releases, http://'$NEXUS_IP':8081/nexus/content/repositories/snapshots@snapshots@id=local.nexus.snapshots'
 
 # Logging
 export GAH_LOGGING=log4j.logger.com.garethahealy=TRACE
@@ -44,10 +43,6 @@ export FABRIC_HOSTS=("fabric-001" "fabric-002" "fabric-003")
 export BROKER_HOSTS=($MACHINE2)
 export APP_HOSTS=($MACHINE3)
 export GATEWAY_HOSTS=($MACHINE1)
-
-# Host OS paths
-export HOST_RH_HOME=/opt/rh
-export HOST_FUSE_HOME=/opt/rh/jboss-fuse-6.2.1.redhat-084
 
 # Karaf and application user credentials
 export KARAF_USER=admin
