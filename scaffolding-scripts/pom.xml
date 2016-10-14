@@ -6,7 +6,7 @@
     <parent>
         <groupId>com.garethahealy.jboss-fuse-setup</groupId>
         <artifactId>jboss-fuse-setup-parent</artifactId>
-        <version>1.0.4</version>
+        <version>6.3.0-SNAPSHOT</version>
         <relativePath>../</relativePath>
     </parent>
     <packaging>pom</packaging>
