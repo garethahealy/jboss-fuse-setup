@@ -36,10 +36,12 @@ RED="\e[41m\e[37m\e[1m"
 YELLOW="\e[33m"
 WHITE="\e[0m"
 
-read -n1 -r -p "Press the any key..."
+export DEBUG_MODE=false
+export INTERACTIVE_MODE=true
 
+EXPECTED_ARGS_COUNT=4
 ARGS_COUNTER=0
-while getopts ":e:u:x:" opt; do
+while getopts ":e:u:i:x:" opt; do
   ARGS_COUNTER=$[$ARGS_COUNTER +1]
 
   case $opt in
@@ -47,18 +49,20 @@ while getopts ":e:u:x:" opt; do
     ;;
     u) export SSH_USER=$OPTARG
     ;;
+    i) export INTERACTIVE_MODE=$OPTARG
+    ;;
     x) export DEBUG_MODE=$OPTARG
     ;;
     \?)
-    echo -e $RED"Illegal parameters: -$OPTARG"$WHITE
-    echo -e $RED"Usage: ./deploy.sh -e (environment) -u (sshuser) -x (debug - optional)"$WHITE
-    echo -e $RED"Example: ./deploy.sh -e local -u fuse -x true"$WHITE
+    echo -e $RED"Illegal parameters: -$OPTARG expected: $EXPECTED_ARGS_COUNT"$WHITE
+    echo -e $RED"Usage: ./deploy.sh -e (environment) -u (sshuser) -i (interactive mode - default: true) -x (debug - default: false)"$WHITE
+    echo -e $RED"Example: ./deploy.sh -e local -u fuse -i true -x true"$WHITE
     exit 1
     ;;
   esac
 done
 
-if [[ $ARGS_COUNTER -gt 3 ]]; then
+if [[ $ARGS_COUNTER -gt $EXPECTED_ARGS_COUNT ]]; then
     echo -e $RED"Illegal number of parameters: $ARGS_COUNTER"$WHITE
     echo -e $RED"Usage: ./deploy.sh -e (environment) -u (sshuser) -x (debug - optional)"$WHITE
     echo -e $RED"Example: ./deploy.sh -e local -u fuse -x true"$WHITE
@@ -73,6 +77,11 @@ else
     exit 1
 fi
 
+if [[ "$INTERACTIVE_MODE" == "true" ]]; then
+    echo -e $GREEN"Interactive mode"$WHITE
+    read -n1 -r -p "Press the any key..."
+fi
+
 echo -e $GREEN"SSH_USER: $SSH_USER"$WHITE
 
 if [[ "$DEBUG_MODE" == "true" ]]; then
@@ -83,6 +92,7 @@ fi
 echo ""
 
 # Set the environment variables for the selected environment
+. ./envs/base-environment.sh
 . ./envs/$DEPLOYMENT_ENVIRONMENT/environment.sh
 . ./lib/helper_functions.sh
 
@@ -95,7 +105,10 @@ fi
 
 if [[ -d "$HOST_FUSE_HOME/data" ]]; then
     echo -e $RED"$HOST_FUSE_HOME/data already exists!"$WHITE
-    read -n1 -r -p "If you continue, your current enviroment will be deleted!"
+
+    if [[ "$INTERACTIVE_MODE" == "true" ]]; then
+        read -n1 -r -p "If you continue, your current enviroment will be deleted!"
+    fi
 fi
 
 # Create fabric
@@ -119,6 +132,12 @@ karaf_client fabric:profile-edit --pid \"org.ops4j.pax.logging/log4j.rootLogger=
 
 if [[ $AMQ_INTERNAL_PASSWORD == "readline" ]]; then
     echo -e $GREEN"Enter password for 'amq' user"$WHITE
+
+    if [[ "$INTERACTIVE_MODE" == "false" ]]; then
+        echo -e $GREEN"Interactive Mode is false, but AMQ password is readline. How can i get the password without my human?!?"$WHITE
+        exit 1
+    fi
+
     read -p "Password for 'amq' user: " amqpass
     AMQ_INTERNAL_PASSWORD=$amqpass;
 fi

@@ -4,7 +4,7 @@
 # #%L
 # GarethHealy :: JBoss Fuse Setup :: Scaffolding Scripts
 # %%
-# Copyright (C) 2013 - 2015 Gareth Healy
+# Copyright (C) 2013 - 2016 Gareth Healy
 # %%
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -19,6 +19,7 @@
 # limitations under the License.
 # #L%
 ###
+
 set +x
 
 ## How to run:
@@ -38,27 +39,31 @@ RED="\e[41m\e[37m\e[1m"
 YELLOW="\e[33m"
 WHITE="\e[0m"
 
-read -n1 -r -p "Press the any key..."
+export DEBUG_MODE=false
+export INTERACTIVE_MODE=true
 
+EXPECTED_ARGS_COUNT=3
 ARGS_COUNTER=0
-while getopts ":e:x:" opt; do
+while getopts ":e:i:x:" opt; do
   ARGS_COUNTER=$[$ARGS_COUNTER +1]
 
   case $opt in
     e) export DEPLOYMENT_ENVIRONMENT=$OPTARG
     ;;
+    i) export INTERACTIVE_MODE=$OPTARG
+    ;;
     x) export DEBUG_MODE=$OPTARG
     ;;
     \?)
-    echo -e $RED"Illegal parameters: -$OPTARG"$WHITE
-    echo -e $RED"Usage: ./install-fuse.sh -e (environment) -x (debug - optional)"$WHITE
-    echo -e $RED"Example: ./install-fuse.sh -e local -x true"$WHITE
+    echo -e $RED"Illegal parameters: -$OPTARG expected: $EXPECTED_ARGS_COUNT"$WHITE
+    echo -e $RED"Usage: ./install-fuse.sh -e (environment) -i (interactive mode - default: true) -x (debug - default: false)"$WHITE
+    echo -e $RED"Example: ./install-fuse.sh -e local -i true -x true"$WHITE
     exit 1
     ;;
   esac
 done
 
-if [[ $ARGS_COUNTER -gt 2 ]]; then
+if [[ $ARGS_COUNTER -gt $EXPECTED_ARGS_COUNT ]]; then
     echo -e $RED"Illegal number of parameters: $ARGS_COUNTER"$WHITE
     echo -e $RED"Usage: ./install-fuse.sh -e (environment) -x (debug - optional)"$WHITE
     echo -e $RED"Example: ./install-fuse.sh -e local -x true"$WHITE
@@ -73,6 +78,11 @@ else
     exit 1
 fi
 
+if [[ "$INTERACTIVE_MODE" == "true" ]]; then
+    echo -e $GREEN"Interactive mode"$WHITE
+    read -n1 -r -p "Press the any key..."
+fi
+
 if [[ "$DEBUG_MODE" == "true" ]]; then
     echo -e $GREEN"Debug mode"$WHITE
     set -x
@@ -81,15 +91,9 @@ fi
 echo ""
 
 # Set the environment variables for the selected environment
+. ./envs/base-environment.sh
 . ./envs/$DEPLOYMENT_ENVIRONMENT/environment.sh
 . ./lib/helper_functions.sh
-
-FUSE_ZIP=jboss-fuse-full-6.2.1.redhat-084.zip
-FUSE_ZIP_DOWNLOAD=http://$NEXUS_IP:8081/nexus/content/repositories/releases/org/jboss/fuse/jboss-fuse-full/6.2.1.redhat-084/$FUSE_ZIP
-SCAFFOLDING_ZIP=$HOST_RH_HOME/scaffolding-scripts-${project.version}-all.zip
-SCRIPTS_FOLDER=$HOST_RH_HOME/scripts
-
-kill_karaf_instances
 
 if [[ ! -d $HOST_RH_HOME ]]; then
     echo -e $RED"$HOST_RH_HOME does not exist!"$WHITE
@@ -98,7 +102,11 @@ fi
 
 if [[ -d $HOST_FUSE_HOME ]]; then
     echo -e $RED"$HOST_FUSE_HOME already exists!"$WHITE
-    read -n1 -r -p "If you continue, your current enviroment will be deleted!"
+    if [[ "$INTERACTIVE_MODE" == "true" ]]; then
+        read -n1 -r -p "If you continue, your current enviroment will be deleted!"
+    fi
+
+    kill_karaf_instances
 
     echo -e $YELLOW"Removing old: $HOST_FUSE_HOME"$WHITE
     rm -rf $HOST_FUSE_HOME
@@ -133,6 +141,12 @@ echo -e $GREEN"Starting JBoss Fuse install..."$WHITE
 
 if [[ $KARAF_PASSWORD == "readline" ]]; then
     echo -e $GREEN"Enter password for 'admin' user"$WHITE
+
+    if [[ "$INTERACTIVE_MODE" == "false" ]]; then
+        echo -e $GREEN"Interactive Mode is false, but Karaf password is readline. How can i get the password without my human?!?"$WHITE
+        exit 1
+    fi
+
     read -p "Password for 'admin' user: " adminpass
     KARAF_PASSWORD=$adminpass;
 
@@ -144,17 +158,17 @@ if [[ $DOWNLOAD_FUSE_ZIP == "true" ]]; then
 
     cd $HOST_RH_HOME &&
         wget $FUSE_ZIP_DOWNLOAD &&
-        unzip $FUSE_ZIP
+        unzip -q -o $FUSE_ZIP
 else
     echo -e $GREEN"Unzipping JBoss Fuse.zip..."$WHITE
 
     cd $HOST_RH_HOME &&
-        unzip $FUSE_ZIP
+        unzip -q -o $FUSE_ZIP
 fi
 
 if [[ ! -d $HOST_FUSE_HOME ]]; then
     echo -e $RED"$HOST_FUSE_HOME doesnt exist"$WHITE
-    exit 1;
+    exit 1
 fi
 
 echo -e $GREEN"Applying base config..."$WHITE
@@ -164,7 +178,7 @@ sed -i 's/JAVA_MIN_MEM=512M/JAVA_MIN_MEM=1024M/' $HOST_FUSE_HOME/bin/setenv
 sed -i 's/JAVA_MAX_MEM=512M/JAVA_MAX_MEM=1024M/' $HOST_FUSE_HOME/bin/setenv
 
 cd /tmp &&
-    cp -R scripts $SCRIPTS_FOLDER
+    cp -R scripts $SCRIPTS_FOLDER &&
     cd $SCRIPTS_FOLDER &&
     chmod -R 755 *.sh commands/*.sh envs/$DEPLOYMENT_ENVIRONMENT/*.sh
 
