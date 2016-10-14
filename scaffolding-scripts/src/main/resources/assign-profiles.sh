@@ -33,8 +33,7 @@ RED="\e[41m\e[37m\e[1m"
 YELLOW="\e[33m"
 WHITE="\e[0m"
 
-read -n1 -r -p "Press the any key..."
-
+EXPECTED_ARGS_COUNT=3
 ARGS_COUNTER=0
 while getopts ":e:x:" opt; do
   ARGS_COUNTER=$[$ARGS_COUNTER +1]
@@ -45,15 +44,15 @@ while getopts ":e:x:" opt; do
     x) export DEBUG_MODE=$OPTARG
     ;;
     \?)
-    echo -e $RED"Illegal parameters: -$OPTARG"$WHITE
-    echo -e $RED"Usage: ./assign-profiles.sh -e (environment) -x (debug - optional)"$WHITE
+    echo -e $RED"Illegal parameters: -$OPTARG expected: $EXPECTED_ARGS_COUNT"$WHITE
+    echo -e $RED"Usage: ./assign-profiles.sh -e (environment) -x (debug - default: false)"$WHITE
     echo -e $RED"Example: ./assign-profiles.sh -e local -x true"$WHITE
     exit 1
     ;;
   esac
 done
 
-if [[ $ARGS_COUNTER -gt 3 ]]; then
+if [[ $ARGS_COUNTER -gt $EXPECTED_ARGS_COUNT ]]; then
     echo -e $RED"Illegal number of parameters: $ARGS_COUNTER"$WHITE
     echo -e $RED"Usage: ./assign-profiles.sh -e (environment) -x (debug - optional)"$WHITE
     echo -e $RED"Example: ./assign-profiles.sh -e local -x true"$WHITE
@@ -68,6 +67,7 @@ else
     exit 1
 fi
 
+read -n1 -r -p "Press the any key..."
 echo -e $GREEN"SSH_USER: $SSH_USER"$WHITE
 
 if [[ "$DEBUG_MODE" == "true" ]]; then
@@ -80,6 +80,7 @@ echo ""
 export RELEASE_VERSION="1.2"
 
 # Set the environment variables for the selected environment
+. ./envs/base-environment.sh
 . ./envs/$DEPLOYMENT_ENVIRONMENT/environment.sh
 . ./lib/helper_functions.sh
 

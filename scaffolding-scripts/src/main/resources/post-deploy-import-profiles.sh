@@ -5,7 +5,7 @@
 #####
 
 echo "STILL WORK IN PROGRESS"
-exit 1;
+exit 1
 
 ###
 # #%L
@@ -41,8 +41,7 @@ RED="\e[41m\e[37m\e[1m"
 YELLOW="\e[33m"
 WHITE="\e[0m"
 
-read -n1 -r -p "Press the any key..."
-
+EXPECTED_ARGS_COUNT=2
 ARGS_COUNTER=0
 while getopts ":e:x:" opt; do
   ARGS_COUNTER=$[$ARGS_COUNTER +1]
@@ -53,15 +52,15 @@ while getopts ":e:x:" opt; do
     x) export DEBUG_MODE=$OPTARG
     ;;
     \?)
-    echo -e $RED"Illegal parameters: -$OPTARG"$WHITE
-    echo -e $RED"Usage: ./post-deploy-import-profiles.sh -e (environment) -x (debug - optional)"$WHITE
+    echo -e $RED"Illegal parameters: -$OPTARG expected: $EXPECTED_ARGS_COUNT"$WHITE
+    echo -e $RED"Usage: ./post-deploy-import-profiles.sh -e (environment) -x (debug - default: false)"$WHITE
     echo -e $RED"Example: ./post-deploy-import-profiles.sh -e local -x true"$WHITE
     exit 1
     ;;
   esac
 done
 
-if [[ $ARGS_COUNTER -gt 2 ]]; then
+if [[ $ARGS_COUNTER -gt $EXPECTED_ARGS_COUNT ]]; then
     echo -e $RED"Illegal number of parameters: $ARGS_COUNTER"$WHITE
     echo -e $RED"Usage: ./post-deploy-import-profiles.sh -e (environment) -x (debug - optional)"$WHITE
     echo -e $RED"Example: ./post-deploy-import-profiles.sh -e local -x true"$WHITE
@@ -76,6 +75,8 @@ else
     exit 1
 fi
 
+read -n1 -r -p "Press the any key..."
+
 if [[ "$DEBUG_MODE" == "true" ]]; then
     echo -e $GREEN"Debug mode"$WHITE
     set -x
@@ -84,6 +85,7 @@ fi
 echo ""
 
 # Set the environment variables for the selected environment
+. ./envs/base-environment.sh
 . ./envs/$DEPLOYMENT_ENVIRONMENT/environment.sh
 . ./lib/helper_functions.sh
 

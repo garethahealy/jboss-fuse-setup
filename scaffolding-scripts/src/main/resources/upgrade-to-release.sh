@@ -34,8 +34,7 @@ RED="\e[41m\e[37m\e[1m"
 YELLOW="\e[33m"
 WHITE="\e[0m"
 
-read -n1 -r -p "Press the any key..."
-
+EXPECTED_ARGS_COUNT=3
 ARGS_COUNTER=0
 while getopts ":e:v:x:" opt; do
   ARGS_COUNTER=$[$ARGS_COUNTER +1]
@@ -48,15 +47,15 @@ while getopts ":e:v:x:" opt; do
     x) export DEBUG_MODE=$OPTARG
     ;;
     \?)
-    echo -e $RED"Illegal parameters: -$OPTARG"$WHITE
-    echo -e $RED"Usage: ./upgrade-to-release.sh -e (environment) -v (version) -x (debug - optional)"$WHITE
+    echo -e $RED"Illegal parameters: -$OPTARG expected: $EXPECTED_ARGS_COUNT"$WHITE
+    echo -e $RED"Usage: ./upgrade-to-release.sh -e (environment) -v (version) -x (debug - default: false)"$WHITE
     echo -e $RED"Example: ./upgrade-to-release.sh -e local -v 1.2 -x true"$WHITE
     exit 1
     ;;
   esac
 done
 
-if [[ $ARGS_COUNTER -gt 3 ]]; then
+if [[ $ARGS_COUNTER -gt $EXPECTED_ARGS_COUNT ]]; then
     echo -e $RED"Illegal number of parameters: $ARGS_COUNTER"$WHITE
     echo -e $RED"Usage: ./upgrade-to-release.sh -e (environment) -v (version) -x (debug - optional)"$WHITE
     echo -e $RED"Example: ./upgrade-to-release.sh -e local -v 1.2 -x true"$WHITE
@@ -71,6 +70,8 @@ else
     exit 1
 fi
 
+read -n1 -r -p "Press the any key..."
+
 if [[ "$DEBUG_MODE" == "true" ]]; then
     echo -e $GREEN"Debug mode"$WHITE
     set -x
@@ -81,6 +82,7 @@ echo ""
 echo -e $GREEN"RELEASE_VERSION: $RELEASE_VERSION"$WHITE
 
 # Set the environment variables for the selected environment
+. ./envs/base-environment.sh
 . ./envs/$DEPLOYMENT_ENVIRONMENT/environment.sh
 . ./lib/helper_functions.sh
 
