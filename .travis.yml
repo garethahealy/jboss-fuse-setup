@@ -2,6 +2,8 @@ dist: trusty
 language: java
 jdk:
   - oraclejdk8
+install:
+  - java -version && javac -version && mvn -version
 before_script:
   - mvn dependency:resolve-plugins dependency:resolve
 script:
@@ -9,3 +11,4 @@ script:
 cache:
   directories:
   - $HOME/.m2
+  - $HOME/.victims
