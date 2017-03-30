@@ -1,23 +1,35 @@
 sudo: required
 dist: trusty
+env:
+  global:
+  - secure: gMHkFwQmSlVgEqnaj4U/eLOJcl68fx9TWXp+UEZxnIof3gZoGs6Nk2boJmld/An13wAOFOYzniMz0ASloirsjh0OkbFpxNHLX8gcYx7Q8EeOJK7g/s61OkaKfa1Y8pfYklF6XK/dPetJ8ttrZAOo+YOLwKyWH/29Q/eemguJdys=
+  - secure: endcBbtCWlynF7IgA0cJP1NyD1PPWiz4G3vEINLeLQW5LmRqtOD4XCEMolUVkUlGndEUYMeixVRb+g7hLproz71mDBStzVfDvwr/rLmWMetijPamEzYQbO3fId45ZvhqXsQeoe5DDv7DtZkchwCsxvI8cXpprXUsuOifPWSR+w4=
+  - secure: RbIWxj+/qzHSZBersyK5oIN6r7lNFRpUkK5h1HpqmBEpLOK7XzWfhcVLTlMeYY3LC1sXpb6y8xfkqY4Hlqr1cjixWvUjdwdO1CKVx8C9I5V1ZeaNxkcZn421iExbmezSINVim4uBButDIu1IngIEDmPIEjqkqhCdcWaPphEFdEc=
+  - secure: Ytzsg1XjoVdii0ztExgw5HulrqVYM1T8JcZVerkBv+v8O3jgUlW99liszH4VzOq89eVHtJC9obnrMwLfWUj+LVBBYgy1761wgEM4d3RKPzwnhJVvPHWMWL9ujkr8tek7FojmE9EwbnSQKHE0Gj+HJ7TDyzuAl+2SPDEQTLLPveQ=
 addons:
   apt:
     sources:
-    - debian-sid # Grab ShellCheck from the Debian repo
+    - debian-sid
     packages:
     - shellcheck
 language: java
 jdk:
-  - oraclejdk8
+- oraclejdk8
+before_install:
+- bash .travis/deploy-codesigning.sh
 install:
-  - bash .travis/update.sh
-  - export M2_HOME=/usr/share/maven3 && export PATH=${M2_HOME}/bin:${PATH} && export MAVEN_OPTS="-Xms2048m -Xmx2048m"
-  - java -version && javac -version && mvn -version -B
+- bash .travis/update.sh
+- export M2_HOME=/usr/share/maven3 && export PATH=${M2_HOME}/bin:${PATH} && export MAVEN_OPTS="-Xms2048m -Xmx2048m"
+- java -version && javac -version && mvn -version -B
 before_script:
 - mvn dependency:resolve-plugins dependency:resolve -B
 - find . -type f -name "*.sh" -exec shellcheck {} \;
 script:
-  - mvn clean install -B -Dgpg.skip=true
+- mvn clean install -B -Dgpg.skip=true
+deploy:
+  provider: script
+  script: bash .travis/deploy.sh
+  skip_cleanup: true
 cache:
   directories:
   - $HOME/.m2
