@@ -18,14 +18,13 @@ jdk:
 before_install:
 - bash .travis/deploy-codesigning.sh
 install:
-- bash .travis/update.sh
-- export M2_HOME=/usr/share/maven3 && export PATH=${M2_HOME}/bin:${PATH} && export MAVEN_OPTS="-Xms2048m -Xmx2048m"
-- java -version && javac -version && mvn -version -B
+- mvn -N io.takari:maven:wrapper -Dmaven=3.5.0
+- java -version && javac -version && ./mvnw -version -B
 before_script:
-- mvn dependency:resolve-plugins dependency:resolve -B
+- ./mvnw dependency:go-offline -B
 - find . -type f -name "*.sh" -exec shellcheck {} \;
 script:
-- mvn clean install -B -Dgpg.skip=true
+- ./mvnw clean install -B -Dgpg.skip=true
 deploy:
   provider: script
   script: bash .travis/deploy.sh
