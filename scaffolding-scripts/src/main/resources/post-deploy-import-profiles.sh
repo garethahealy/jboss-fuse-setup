@@ -11,7 +11,7 @@ exit 1
 # #%L
 # GarethHealy :: JBoss Fuse Setup :: Scaffolding Scripts
 # %%
-# Copyright (C) 2013 - 2017 Gareth Healy
+# Copyright (C) 2013 - 2018 Gareth Healy
 # %%
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
